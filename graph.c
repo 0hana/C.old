@@ -3,7 +3,7 @@
 #include "graph.h"
 #include "queue.h"
 
-struct graph_bfs_data const * graph_bfs(struct graph * const G, size_t Source) {
+struct graph_bfs_data const * graph_bfs(struct graph * const G, size_t const Source) {
 	//Allocate return structures
 	size_t * Distance = malloc(G->Vertices*sizeof(size_t));
 	if(!Distance) return NULL;
@@ -24,15 +24,19 @@ struct graph_bfs_data const * graph_bfs(struct graph * const G, size_t Source) {
 	//Initiate BFS
 	Distance[Source] = 0;
 	struct queue Vertex_Queue = { .Head = NULL, .Tail = NULL, .Unit = sizeof(size_t) };
-	if(!queue_push(Vertex_Queue, Source)) return free(Distance), free(Parent), free(Data), NULL;
+	if(!queue_push(Vertex_Queue, &Source)) return free(Distance), free(Parent), free(Data), NULL;
 	while(Vertex_Queue.Tail) {
-		size_t Vertex = queue_pop(Vertex_Queue);
+		size_t Vertex;
+		{
+			size_t * Address = (size_t *)queue_pop(Vertex_Queue)
+		}
 		for(size_t Adjacency = 0; Adjacency < G->Adjacencies[Vertex]; Adjacency++) {
-			size_t const Neighbor = G->Edge[Vertex][Adjacency];
+			#define Neighbor G->Edge[Vertex][Adjacency]
 			if(Distance[Neighbor] == -1) {
 				Distance[Neighbor] = Distance[Vertex] + 1;
 				Parent[Neighbor] = Vertex;
-				if(!queue_push(Vertex_Queue, Neighbor)) return free(Distance), free(Parent), free(Data), NULL;
+				if(!queue_push(Vertex_Queue, &Neighbor)) return free(Distance), free(Parent), free(Data), NULL;
+				#undef Neighbor
 			}
 		}
 	}
