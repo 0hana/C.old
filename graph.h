@@ -6,10 +6,54 @@
 
 struct graph {
 	size_t const Vertices;
-	size_t const * const Adjacencies;//(graph)G.Adjacencies[0]: the number adjacent vertices to the 0th
-	size_t const * const * const Edge;//(graph)G.Edge[u][v]: the edge from vertex u to vertex v
-};
+	size_t const * const Adjacencies;
+	struct graph_edge {
+		float Weight;
+		size_t Destination;
+	} const * const * const Edge;
+} * graph_transpose(struct graph * G) {
+	//Allocate return structures
+	struct graph * Transpose = malloc(sizeof(struct graph));
+	if(!Transpose) return NULL;
+	size_t * Adjacencies = malloc(sizeof(size_t) * G->Vertices);
+	if(!Adjacencies) return free(Transpose), NULL;
+	else {
+		//Determine Adjacencies for each vertex in Transpose;
+		for(size_t V = 0; V < G->Vertices; V++) Adjacencies[V] = 0;
+		for(size_t V = 0; V < G->Vertices; V++) {
+			for(size_t Adjacent = 0; Adjacent < G->Adjacencies[V]; Adjacent++) {
+				Adjacencies[G->Edge[V][Adjacent].Destination]++;
+			}
+		}
+	}
+	struct graph_edge ** Edge = malloc(sizeof(struct graph_edge *) * G->Vertices);
+	if(!Edge) return free(Adjacencies), free(Transpose), NULL;
+	else {
+		for(size_t V = 0; V < G->Vertices; V++) {
+			Edge[V] = malloc(sizeof(struct graph_edge) * Adjacencies[V]);
+			if(!Edge[V]) {
+				while(V-- != (size_t)-1) free(Edge[V]);
+				return free(Edge), free(Adjacencies), free(Transpose), NULL;
+			}
+		}
+	}
 
+	//Initialize return structures
+	*(size_t *)&Transpose->Vertices = G->Vertices;
+	*(size_t **)&Transpose->Adjacencies = Adjacencies;
+	*(struct graph_edge ***)&Transpose->Edge = Edge;
+	{
+		size_t Adjacency[G->Vertices];
+		for(size_t V = 0; V < G->Vertices; V++) Adjacency[V] = 0;
+		for(size_t V = 0; V < G->Vertices; V++) {
+			for(size_t Adjacent = 0; Adjacent < G->Adjacencies[V]; Adjacent++) {
+				*(struct graph_edge *)&Transpose->Edge[G->Edge[V][Adjacent].Destination][Adjacency[G->Edge[V][Adjacent].Destination]++] = (struct graph_edge){ .Destination = V, .Weight = G->Edge[V][Adjacent].Weight };
+			}
+		}
+	}
+	return Transpose;	
+}
+/*
 struct graph_bfs_data {
 	size_t const * const Distance;
 	size_t const * const Parent;
@@ -24,5 +68,5 @@ struct graph_dfs_data {
 	enum boolean { true = ~0, false = 0 } const Cyclic;
 	size_t const Topological_Order[];
 } const * graph_dfs(struct graph * const G, size_t Source);
-
+*/
 #endif//_GRAPH
