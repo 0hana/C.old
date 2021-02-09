@@ -53,6 +53,14 @@ struct graph {
 	}
 	return Transpose;	
 }
+
+void graph_free(struct graph * const G) {
+	for(size_t V = 0; V < G->Vertices; V++) free(G->Edge[V]);
+	free(G->Adjacencies);
+	free(G->Edge);
+	free(G);
+}
+
 /*
 struct graph_bfs_data {
 	size_t const * const Distance;
