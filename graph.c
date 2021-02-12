@@ -1,5 +1,6 @@
 //Zero Hanami (C) 2021: graph.c
 
+#include <time.h>
 #include "graph.h"
 /* graph construct
 
@@ -52,6 +53,31 @@ struct graph * graph_transpose(struct graph const * const G) {
 		}
 	}
 	return Transpose;
+}
+
+struct graph * graph_random(size_t const Vertex_Limit, size_t const Edge_Limit) {
+	//Allocate return structures
+	struct graph * Random = malloc(sizeof(struct graph));
+	if(!Random) return NULL;
+	*(struct graph_vertex **)&Random->Vertex = malloc(sizeof(struct graph_vertex) * (*(size_t *)&Random->Vertices = srand(time(0)), (unsigned)rand() * % Vertex_Limit));
+	if(!Random->Vertex) return free(Random), NULL;
+	else {
+		
+		//Determine number of edges per random vertex and Allocate edge array for each random vertex
+		
+		for(size_t V = 0; V < Vertices; V++) {
+			*(size_t *)&Random->Vertex[V].Edges = (unsigned)rand() % Random->Vertices % Edge_Limit;
+			*(struct graph_vertex_edge **)&Random->Vertex[V].Edge = malloc(sizeof(struct graph_vertex_edge) * Random->Vertex[V].Edges;
+			if(!Random->Vertex[V].Edge) {
+				//Release all allocations prior to malloc failure
+				while(V-- > 0) free(Random->Vertex[V].Edge);
+				return free(Random->Vertex), free(Random), NULL;
+			}
+			for(size_t E = 0; E < Random->Vertex[V].Edges; E++) {
+				//Need to create iterative ascending random integer function for selecting destination vertices
+			}
+		}
+	}
 }
 
 void graph_free(struct graph * const G) {
