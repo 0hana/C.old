@@ -1,6 +1,5 @@
 //Zero Hanami (C) 2021: graph.c
 
-#include <time.h>
 #include "graph.h"
 /* graph construct
 

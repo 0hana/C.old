@@ -2,7 +2,7 @@
 
 #ifndef _GRAPH
 #define _GRAPH
-#include <stdlib.h>
+#include "random.h"
 
 struct graph {
 	size_t const Vertices;
