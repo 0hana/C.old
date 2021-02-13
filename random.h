@@ -5,6 +5,6 @@
 #include <stdlib.h>
 #include <time.h>
 
-size_t * random_array_of_unique_indices(size_t * Random, size_t const Indices, size_t const Modulus);
+size_t * random_array_of_unique_indices(size_t * Random, size_t const Modulus, size_t const Indices);
 
 #endif//_RANDOM
