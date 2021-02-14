@@ -14,7 +14,7 @@ struct graph {
 		} * const Edge;
 	} * const Vertex;
 } * graph_transpose(struct graph const * const G)
-, * graph_random(size_t const Vertex_Limit, Edge_Limit);
+, * graph_random(size_t const Vertex_Limit, size_t const Edge_Limit);
 
 void graph_free(struct graph * const G);
 
