@@ -24,7 +24,7 @@ struct graph * graph_transpose(struct graph const * const G) {
 	if(!Transpose->Vertex) return free(Transpose), NULL;
 	else {
 		//Determine number of edges per transpose vertex
-		for(size_t V = 0; V < G->Vertices; V++) *(size_t *)Transpose->Vertex[V].Edges = 0;
+		for(size_t V = 0; V < G->Vertices; V++) *(size_t *)&Transpose->Vertex[V].Edges = 0;
 		for(size_t V = 0; V < G->Vertices; V++) for(size_t E = 0; E < G->Vertex[V].Edges; E++) (*(size_t *)&Transpose->Vertex[G->Vertex[V].Edge[E].Destination].Edges)++;
 		//Allocate edge array for each transpose vertex
 		for(size_t V = 0; V < G->Vertices; V++) {
@@ -43,7 +43,7 @@ struct graph * graph_transpose(struct graph const * const G) {
 		size_t Adjacent[G->Vertices];//Counter for each transpose vertex
 		for(size_t V = 0; V < G->Vertices; V++) Adjacent[V] = 0;
 		for(size_t V = 0; V < G->Vertices; V++) {
-			for(size_t E = 0; V < G->Vertex[V].Edges; E++) {
+			for(size_t E = 0; E < G->Vertex[V].Edges; E++) {
 				#define X G->Vertex[V].Edge[E]
 				*(size_t *)&Transpose->Vertex[X.Destination].Edge[Adjacent[X.Destination]].Destination = V;
 				Transpose->Vertex[X.Destination].Edge[Adjacent[X.Destination]++].Weight = X.Weight;
@@ -91,6 +91,17 @@ void graph_free(struct graph * const G) {
 	for(size_t V = 0; V < G->Vertices; V++) free(G->Vertex[V].Edge);
 	free(G->Vertex);
 	free(G);
+}
+
+void graph_print(struct graph const * const G) {
+	printf("Vertices: %lu\n", G->Vertices);
+	for(size_t V = 0; V < G->Vertices; V++) {
+		printf("%lu :", V);
+		for(size_t E = 0; E < G->Vertex[V].Edges; E++) {
+			printf("\t%lu\t%f\n", G->Vertex[V].Edge[E].Destination, G->Vertex[V].Edge[E].Weight);
+		}
+		printf("\n");
+	}
 }
 
 /*

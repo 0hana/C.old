@@ -2,6 +2,7 @@
 
 #ifndef _GRAPH
 #define _GRAPH
+#include <stdio.h>
 #include "random.h"
 
 struct graph {
@@ -16,7 +17,7 @@ struct graph {
 } * graph_transpose(struct graph const * const G)
 , * graph_random(size_t const Vertex_Limit, size_t const Edge_Limit);
 
-void graph_free(struct graph * const G);
+void graph_free(struct graph * const G), graph_print(struct graph const * const G);
 
 /*
 struct graph_bfs_data {
