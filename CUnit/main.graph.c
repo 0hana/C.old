@@ -1,7 +1,7 @@
-//Zero Hanami (C) 2021: graph.main.c
+//Zero Hanami (C) 2021: main.graph.c
 
 #include <CUnit/Basic.h>
-#include <string.h>
+#include <stdio.h>
 #include "0hana.C/graph.h"
 
 #define VERTEX_LIMIT 100
@@ -10,8 +10,10 @@
 void test_graph_transpose(void) {
 
 	unsigned int Failures = CU_get_number_of_failures();
+	fprintf(stderr, "\nFailures at start %u\n", Failures);
 
 	for(size_t I = 0; I < 1000; I++) {
+
 		struct graph * G = graph_random(VERTEX_LIMIT, EDGE_LIMIT), * T = NULL;
 		CU_ASSERT_PTR_NOT_NULL(G);
 
@@ -20,11 +22,27 @@ void test_graph_transpose(void) {
 
 		CU_ASSERT_EQUAL(T->Vertices, G->Vertices);
 
+		//Test that G edge destinations as T edge sources point to the vertex of that edge in G
+		size_t T_Vertex_Edge_Iterator[G->Vertices];
+		for(size_t V = 0; V < G->Vertices; V++) T_Vertex_Edge_Iterator[V] = 0;
+		//fprintf(stderr, "\nGraph %lu\n\n", I);
+		for(size_t V = 0; V < G->Vertices; V++) {
+			for(size_t E = 0; E < G->Vertex[V].Edges; E++) {
+				#define G_DEST G->Vertex[V].Edge[E].Destination
+				//fprintf(stderr, "%lu %lu : TV = %lu\n", V, T->Vertex[G_DEST].Edge[T_Vertex_Edge_Iterator[G_DEST]].Destination, G_DEST);
+				CU_ASSERT_EQUAL(V, T->Vertex[G_DEST].Edge[T_Vertex_Edge_Iterator[G_DEST]++].Destination);
+				#undef G_DEST
+			}
+		}
+
 		graph_free(T);
 		graph_free(G);
 
-		CU_ASSERT_EQUAL_FATAL(Failures, CU_get_number_of_failures());
+		//Problem?:
+		//CU_ASSERT_EQUAL_FATAL(Failures, CU_get_number_of_failures());
 	}
+
+	fprintf(stderr, "Failures at end %u\n", CU_get_number_of_failures());
 }
 
 void test_graph_random(void) {
