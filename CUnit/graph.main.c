@@ -2,12 +2,14 @@
 
 #include <CUnit/Basic.h>
 #include <string.h>
-#include "../graph.h"
+#include "0hana.C/graph.h"
 
 #define VERTEX_LIMIT 100
 #define EDGE_LIMIT -1
 
 void test_graph_transpose(void) {
+
+	unsigned int Failures = CU_get_number_of_failures();
 
 	for(size_t I = 0; I < 1000; I++) {
 		struct graph * G = graph_random(VERTEX_LIMIT, EDGE_LIMIT), * T = NULL;
@@ -16,8 +18,12 @@ void test_graph_transpose(void) {
 		T = graph_transpose(G);
 		CU_ASSERT_PTR_NOT_NULL(T);
 
+		CU_ASSERT_EQUAL(T->Vertices, G->Vertices);
+
 		graph_free(T);
 		graph_free(G);
+
+		CU_ASSERT_EQUAL_FATAL(Failures, CU_get_number_of_failures());
 	}
 }
 
@@ -43,7 +49,8 @@ void test_graph_random(void) {
 		}
 		
 		graph_free(G);
-		CU_ASSERT_FATAL(Failures == CU_get_number_of_failures());
+
+		CU_ASSERT_EQUAL_FATAL(Failures, CU_get_number_of_failures());
 	}
 }
 
