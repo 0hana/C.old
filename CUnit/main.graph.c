@@ -10,7 +10,6 @@
 void test_graph_transpose(void) {
 
 	unsigned int Failures = CU_get_number_of_failures();
-	fprintf(stderr, "\nFailures at start %u\n", Failures);
 
 	for(size_t I = 0; I < 1000; I++) {
 
@@ -39,10 +38,8 @@ void test_graph_transpose(void) {
 		graph_free(G);
 
 		//Problem?:
-		//CU_ASSERT_EQUAL_FATAL(Failures, CU_get_number_of_failures());
+		CU_ASSERT_EQUAL_FATAL(Failures, CU_get_number_of_failures());
 	}
-
-	fprintf(stderr, "Failures at end %u\n", CU_get_number_of_failures());
 }
 
 void test_graph_random(void) {
