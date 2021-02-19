@@ -8,7 +8,7 @@ Init:
 	make Build/test
 
 Build/test: CUnit/test.main.c Build/graph.o Build/queue.o Build/random.o
-	gcc $(CFLAGS) -lcunit CUnit/test.main.c Build/graph.o Build/random.o -o Build/test
+	gcc $(CFLAGS) -lcunit CUnit/test.main.c Build/graph.o Build/queue.o Build/random.o -o Build/test
 	@echo Make complete. Initiating CUnit via Valgrind
 	@valgrind --leak-check=yes Build/test 2> >(tee Artifact/test.err) 1> >(tee Artifact/test.out)
 	@echo "See results in Artifacts/test.err and Artifacts/test.out"

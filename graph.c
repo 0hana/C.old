@@ -1,20 +1,7 @@
 //Zero Hanami (C) 2021: graph.c
 
 #include "graph.h"
-/* graph construct
-
-struct graph {
-	size_t const Vertices;
-	struct graph_vertex {
-		size_t const Edges;
-		struct graph_vertex_edge {
-			size_t const Destination;
-			float Weight;
-		} * const Edge;
-	} * const Vertex;
-};
-
-*/
+#include "queue.h"
 
 struct graph * graph_transpose(struct graph const * const G) {
 	//Allocate return structures
@@ -54,6 +41,7 @@ struct graph * graph_transpose(struct graph const * const G) {
 	return Transpose;
 }
 
+
 struct graph * graph_random(size_t const Vertex_Limit, size_t const Edge_Limit) {
 	//Allocate return structures
 	struct graph * Random = malloc(sizeof(struct graph));
@@ -87,11 +75,13 @@ struct graph * graph_random(size_t const Vertex_Limit, size_t const Edge_Limit) 
 	return Random;
 }
 
+
 void graph_free(struct graph * const G) {
 	for(size_t V = 0; V < G->Vertices; V++) free(G->Vertex[V].Edge);
 	free(G->Vertex);
 	free(G);
 }
+
 
 void graph_print(struct graph const * const G) {
 	printf("Vertices: %lu\n", G->Vertices);
@@ -104,45 +94,33 @@ void graph_print(struct graph const * const G) {
 	}
 }
 
-/*
-//Zero Hanami (C) 2021
 
-#include "graph.h"
-#include "queue.h"
-
-struct graph_bfs_data const * graph_bfs(struct graph * const G, size_t const Source) {
+struct graph_bfs_data * graph_bfs(struct graph const * const G, size_t const Source) {
 	//Allocate return structures
-	size_t * Distance = malloc(G->Vertices*sizeof(size_t));
-	if(!Distance) return NULL;
-	size_t * Parent  = malloc(G->Vertices*sizeof(size_t));
-	if(!Parent) return free(Distance), NULL;
 	struct graph_bfs_data * const Data = malloc(sizeof(struct graph_bfs_data));
-	if(!Data) return free(Distance), free(Parent), NULL;
+	if(!Data) return NULL;
+	*(size_t **)&Data->Distance = malloc(sizeof(size_t) * G->Vertices);
+	if(!Data->Distance) return free(Data), NULL;
+	*(size_t **)&Data->Parent = malloc(sizeof(size_t) * G->Vertices);
+	if(!Data->Parent) return free(*(size_t **)&Data->Distance), free(Data), NULL;
 
-	//Initialize return structures
-	*(size_t **)&Data->Distance = Distance;
-	*(size_t **)&Data->Parent = Parent;
-
-	for(size_t Vertex = 0; Vertex < G->Vertices; Vertex++) {
-		Distance[Vertex] = -1;
-		Parent[Vertex] = Vertex;
+	for(size_t V = 0; V < G->Vertices; V++) {
+		*(size_t *)&Data->Distance[V] = -1;
+		*(size_t *)&Data->Parent[V] = V;
 	}
 
 	//Initiate BFS
-	Distance[Source] = 0;
-	struct queue Vertex_Queue = { .Head = NULL, .Tail = NULL, .Unit = sizeof(size_t) };
-	if(!queue_push(Vertex_Queue, &Source)) return free(Distance), free(Parent), free(Data), NULL;
-	while(Vertex_Queue.Tail) {
-		size_t Vertex;
-		{
-			size_t * Address = (size_t *)queue_pop(Vertex_Queue)
-		}
-		for(size_t Adjacency = 0; Adjacency < G->Adjacencies[Vertex]; Adjacency++) {
-			#define Neighbor G->Edge[Vertex][Adjacency]
-			if(Distance[Neighbor] == -1) {
-				Distance[Neighbor] = Distance[Vertex] + 1;
-				Parent[Neighbor] = Vertex;
-				if(!queue_push(Vertex_Queue, &Neighbor)) return free(Distance), free(Parent), free(Data), NULL;
+	*(size_t *)&Data->Distance[Source] = 0;
+	struct queue Vertex_Queue = { .Head = NULL, .Tail = NULL };
+	if(!queue_push(&Vertex_Queue, Source)) return free(*(size_t **)&Data->Parent), free(*(size_t **)&Data->Distance), free(Data), NULL;
+	while(Vertex_Queue.Head) {
+		size_t V = queue_pop(&Vertex_Queue);
+		for(size_t E = 0; E < G->Vertex[V].Edges; E++) {
+			#define Neighbor G->Vertex[V].Edge[E].Destination
+			if(Data->Distance[Neighbor] == (size_t)-1) {
+				*(size_t *)&Data->Distance[Neighbor] = Data->Distance[V] + 1;
+				*(size_t *)&Data->Parent[Neighbor] = V;
+				if(!queue_push(&Vertex_Queue, Neighbor)) return free(*(size_t **)&Data->Parent), free(*(size_t **)&Data->Distance), free(Data), NULL;
 				#undef Neighbor
 			}
 		}
@@ -150,6 +128,13 @@ struct graph_bfs_data const * graph_bfs(struct graph * const G, size_t const Sou
 	return Data;
 }
 
+void graph_bfs_data_free(struct graph_bfs_data * const D) {
+	free(*(size_t **)&D->Distance);
+	free(*(size_t **)&D->Parent);
+	free(D);
+}
+
+/*
 struct graph_dfs_data const * graph_dfs(struct graph * const G, size_t Source) {
 }
 */

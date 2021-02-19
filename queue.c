@@ -15,12 +15,14 @@ struct queue_node * queue_push(struct queue * const Q, size_t const Push) {
 	return Q->Tail;
 }
 
-void queue_pop(struct queue * const Q) {
-	if(!Q->Head) return;
+size_t queue_pop(struct queue * const Q) {
+	if(!Q->Head) return -1;
 	struct queue_node * H = Q->Head;
 	Q->Head = Q->Head->Next;
+	size_t Data = H->Data;
 	free(H);
 	if(Q->Tail == H) Q->Tail = NULL;
+	return Data;
 }
 
 void queue_free(struct queue * const Q) {

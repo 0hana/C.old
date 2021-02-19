@@ -19,12 +19,15 @@ struct graph {
 
 void graph_free(struct graph * const G), graph_print(struct graph const * const G);
 
-/*
+
 struct graph_bfs_data {
 	size_t const * const Distance;
 	size_t const * const Parent;
-} const * graph_bfs(struct graph * const G, size_t Source);
+} * graph_bfs(struct graph const * const G, size_t const Source);
 
+void graph_bfs_data_free(struct graph_bfs_data * const D);
+
+/*
 struct graph_dfs_data {
 	struct time_stamps {
 		size_t const start;
