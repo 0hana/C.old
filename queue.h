@@ -26,4 +26,4 @@ struct queue {
 
 struct queue_node * queue_push(struct queue * const Q, size_t const Push);
 
-void queue_pop(struct queue * const Q);
+void queue_pop(struct queue * const Q), queue_free(struct queue * const Q);

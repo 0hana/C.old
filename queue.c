@@ -22,3 +22,7 @@ void queue_pop(struct queue * const Q) {
 	free(H);
 	if(Q->Tail == H) Q->Tail = NULL;
 }
+
+void queue_free(struct queue * const Q) {
+	while(Q->Head) queue_pop(Q);
+}
