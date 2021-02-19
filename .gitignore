@@ -52,5 +52,5 @@ Mkfile.old
 dkms.conf
 
 # CUnit execution files
-CUnit/*
-!CUnit/*.*
+Artifact/*
+Build/*
