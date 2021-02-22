@@ -28,7 +28,6 @@ void test_graph_transpose(void) {
 		for(size_t V = 0; V < G->Vertices; V++) {
 			for(size_t E = 0; E < G->Vertex[V].Edges; E++) {
 				#define G_DEST G->Vertex[V].Edge[E].Destination
-				//fprintf(stderr, "%lu %lu : TV = %lu\n", V, T->Vertex[G_DEST].Edge[T_Vertex_Edge_Iterator[G_DEST]].Destination, G_DEST);
 				CU_ASSERT_EQUAL(V, T->Vertex[G_DEST].Edge[T_Vertex_Edge_Iterator[G_DEST]++].Destination);
 				#undef G_DEST
 			}

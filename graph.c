@@ -83,18 +83,6 @@ void graph_free(struct graph * const G) {
 }
 
 
-void graph_print(struct graph const * const G) {
-	printf("Vertices: %lu\n", G->Vertices);
-	for(size_t V = 0; V < G->Vertices; V++) {
-		printf("%lu :", V);
-		for(size_t E = 0; E < G->Vertex[V].Edges; E++) {
-			printf("\t%lu\t%f\n", G->Vertex[V].Edge[E].Destination, G->Vertex[V].Edge[E].Weight);
-		}
-		printf("\n");
-	}
-}
-
-
 struct graph_bfs_data * graph_bfs(struct graph const * const G, size_t const Source) {
 	//Allocate return structures
 	struct graph_bfs_data * const Data = malloc(sizeof(struct graph_bfs_data));
@@ -105,7 +93,7 @@ struct graph_bfs_data * graph_bfs(struct graph const * const G, size_t const Sou
 	if(!Data->Parent) return free(*(size_t **)&Data->Distance), free(Data), NULL;
 
 	for(size_t V = 0; V < G->Vertices; V++) {
-		*(size_t *)&Data->Distance[V] = -1;
+		*(size_t *)&Data->Distance[V] = (size_t)-1;
 		*(size_t *)&Data->Parent[V] = V;
 	}
 
@@ -114,13 +102,13 @@ struct graph_bfs_data * graph_bfs(struct graph const * const G, size_t const Sou
 	struct queue Vertex_Queue = { .Head = NULL, .Tail = NULL };
 	if(!queue_push(&Vertex_Queue, Source)) return free(*(size_t **)&Data->Parent), free(*(size_t **)&Data->Distance), free(Data), NULL;
 	while(Vertex_Queue.Head) {
-		size_t V = queue_pop(&Vertex_Queue);
+		size_t const V = queue_pop(&Vertex_Queue);
 		for(size_t E = 0; E < G->Vertex[V].Edges; E++) {
 			#define Neighbor G->Vertex[V].Edge[E].Destination
 			if(Data->Distance[Neighbor] == (size_t)-1) {
 				*(size_t *)&Data->Distance[Neighbor] = Data->Distance[V] + 1;
 				*(size_t *)&Data->Parent[Neighbor] = V;
-				if(!queue_push(&Vertex_Queue, Neighbor)) return free(*(size_t **)&Data->Parent), free(*(size_t **)&Data->Distance), free(Data), NULL;
+				if(!queue_push(&Vertex_Queue, Neighbor)) return graph_bfs_data_free(Data), NULL;
 				#undef Neighbor
 			}
 		}
