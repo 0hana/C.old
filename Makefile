@@ -1,6 +1,7 @@
 # Zero Hanami -- 0hana.C Makefile
 
-CFLAGS=-Wall -Wextra -g
+DFLAGS=-Wall -Wextra -g
+CFLAGS=$(DFLAGS) -c
 
 Docker:
 	docker cp . hanami:/home
@@ -13,19 +14,25 @@ Init:
 	test -d Build || ( rm Build && mkdir Build )
 	make Build/test
 
-Build/test: CUnit/test.main.c Build/graph.o Build/queue.o Build/random.o
-	gcc $(CFLAGS) CUnit/test.main.c Build/graph.o Build/queue.o Build/random.o -o Build/test -lcunit
+Build/test: Build/test.main.o Build/test.graph.o Build/graph.o Build/queue.o Build/random.o
+	gcc $(DFLAGS) Build/test.main.o Build/test.graph.o Build/graph.o Build/queue.o Build/random.o -o Build/test -lcunit
 	@echo Make complete. Initiating CUnit via Valgrind
 	@bash -c "valgrind --leak-check=yes Build/test 2> >(tee Artifact/test.err) 1> >(tee Artifact/test.out)"
 
+Build/test.main.o: CUnit/test.main.c
+	gcc $(CFLAGS) CUnit/test.main.c -o Build/test.main.o
+
+Build/test.graph.o: CUnit/test.graph.c
+	gcc $(CFLAGS) CUnit/test.graph.c -o Build/test.graph.o
+
 Build/graph.o: graph.c
-	gcc $(CFLAGS) -c graph.c -o Build/graph.o
+	gcc $(CFLAGS) graph.c -o Build/graph.o
 
 Build/queue.o: queue.c
-	gcc $(CFLAGS) -c queue.c -o Build/queue.o
+	gcc $(CFLAGS) queue.c -o Build/queue.o
 
 Build/random.o: random.c
-	gcc $(CFLAGS) -c random.c -o Build/random.o
+	gcc $(CFLAGS) random.c -o Build/random.o
 
 clean:
 	rm -rf Artifact Build
