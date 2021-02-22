@@ -27,16 +27,12 @@ struct graph_bfs_data {
 
 void graph_bfs_data_free(struct graph_bfs_data * const D);
 
-/*
+
 struct graph_dfs_data {
-	struct time_stamps {
-		size_t const start;
-		size_t const finish;
-	} const * const Time_Stamps;
-	enum edge_type { tree_edge, back_edge, forward_edge } const * const * const Edge_Type;
 	enum boolean { true = ~0, false = 0 } const Cyclic;
-	size_t const Topological_Order[];
-} const * graph_dfs(struct graph * const G, size_t Source);
-*/
+	size_t const * const Topological_Order;
+} * graph_dfs(struct graph const * const G, size_t const Source);
+
+void graph_dfs_data_free(struct graph_dfs_data * const D);
 
 #endif//_GRAPH
