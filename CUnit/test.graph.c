@@ -11,7 +11,10 @@ int clean_graph_suite(void) { return 0; }
 void test_graph_random(void) {
 
 	unsigned int const Failures = CU_get_number_of_failures();
-	srand(time(0));	
+	time_t Seed = time(0);
+	srand(Seed);
+
+	printf(" (Seed = %lu) ", Seed);
 
 	for(size_t I = 0; I < 1000; I++) {
 
@@ -76,7 +79,7 @@ void test_graph_bfs(void) {
 	unsigned int const Failures = CU_get_number_of_failures();
 
 	for(size_t I = 0; I < 1000; I++) {
-		
+
 		struct graph * const G = graph_random(VERTEX_LIMIT, EDGE_LIMIT);
 		CU_ASSERT_PTR_NOT_NULL_FATAL(G);
 
@@ -87,27 +90,35 @@ void test_graph_bfs(void) {
 			CU_ASSERT_TRUE(Data->Distance[Source] == 0 && Data->Parent[Source] == Source);
 
 			//A vertex should only equal its parent if it is the Source (Data->Distance[Source] == 0) or unreachable from the Source (Data->Distance[V] == -1)
-			//Test that Distance to Source from a vertex V equals the number of distinct parents a vertex has
-			//Card removal technique can be used to check for repeated parents (a test failure condition)
-
-			//** Non-repeating Parents check currently not implemented **
+			//Test that Distance to Source from a vertex V equals the number of edges between the two by backtracking the Parent array
 			for(size_t V = 1; V < G->Vertices; V++) {
 				#define NON_SOURCE_VERTEX (Source + V) % G->Vertices
 				#define IFF(A, B) ((A || !B) && (!A || B))
 
 				CU_ASSERT_TRUE(IFF((Data->Distance[NON_SOURCE_VERTEX] == (size_t)-1), (Data->Parent[NON_SOURCE_VERTEX] == NON_SOURCE_VERTEX)));
 
+				//Each parent in backtracking should only be visited once, or it is not a path (and therefore not a shortest path--considering only edge count) by definition
+				enum boolean Visited[G->Vertices];
+				for(size_t U = 0; U < G->Vertices; U++) Visited[U] = false;
+
 				size_t Parent_Vertex = Data->Parent[NON_SOURCE_VERTEX];
 				size_t Counter = (size_t)-1;
+
+				Visited[NON_SOURCE_VERTEX] = true;
+				Visited[Parent_Vertex] = true;
+
 				if(Parent_Vertex != NON_SOURCE_VERTEX) {
 					Counter = 1;
 					while(Parent_Vertex != Data->Parent[Parent_Vertex]) {
 						Counter++;
 						Parent_Vertex = Data->Parent[Parent_Vertex];
+
+						//Test that this new Parent_Vertex has not yet been visited during backtracking toward the Source
+						CU_ASSERT_FALSE(Visited[Parent_Vertex]);
+						Visited[Parent_Vertex] = true;
 					}
 					CU_ASSERT_EQUAL(Data->Distance[NON_SOURCE_VERTEX], Counter);
 				}
-
 				#undef IFF
 				#undef NON_SOURCE_VERTEX
 			}
