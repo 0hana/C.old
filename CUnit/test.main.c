@@ -12,7 +12,8 @@ int main(void) {
 	if(!Graph_Suite) return CU_cleanup_registry(), CU_get_error();
 
 	if(!CU_add_test(Graph_Suite, "graph_random", test_graph_random)
-	|| !CU_add_test(Graph_Suite, "graph_transpose", test_graph_transpose))
+	|| !CU_add_test(Graph_Suite, "graph_transpose", test_graph_transpose)
+	|| !CU_add_test(Graph_Suite, "graph_bfs", test_graph_bfs))
 		return CU_cleanup_registry(), CU_get_error();
 
 	return CU_basic_set_mode(CU_BRM_VERBOSE), CU_basic_run_tests(), CU_cleanup_registry(), CU_get_error();

@@ -10,5 +10,6 @@ int clean_graph_suite(void);
 
 void test_graph_random(void);
 void test_graph_transpose(void);
+void test_graph_bfs(void);
 
 #endif//_GRAPH_TEST
