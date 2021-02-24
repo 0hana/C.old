@@ -75,6 +75,13 @@ void test_graph_transpose(void) {
 }
 
 void test_graph_bfs(void) {
+	/*
+	Need to confirm:
+		- all parents in Data->Parent are < G->Vertices
+		- backtracking Parent array for a given index yields a valid path in the graph G
+			- for each non-source vertex NSV in G where Data->Distance[V] != (size_t)-1, there exists an edge E such that G->Vertex[Parent[NSV]].Edge[E].Destination == NSV
+		- all distances in Data->Distance are either < (G->Vertices - 1) or == (size_t)-1
+	*/
 
 	unsigned int const Failures = CU_get_number_of_failures();
 
@@ -109,8 +116,22 @@ void test_graph_bfs(void) {
 
 				if(Parent_Vertex != NON_SOURCE_VERTEX) {
 					Counter = 1;
+
+					enum boolean Valid_Edge = false;
+					for(size_t E = 0; E < G->Vertex[Parent_Vertex].Edges; E++) {
+						if(G->Vertex[Parent_Vertex].Edge[E].Destination == NON_SOURCE_VERTEX) Valid_Edge = true;
+					}
+					CU_ASSERT_TRUE(Valid_Edge);
+
 					while(Parent_Vertex != Data->Parent[Parent_Vertex]) {
 						Counter++;
+
+						Valid_Edge = false;
+						for(size_t E = 0; E < G->Vertex[Data->Parent[Parent_Vertex]].Edges; E++) {
+							if(G->Vertex[Data->Parent[Parent_Vertex]].Edge[E].Destination == Parent_Vertex) Valid_Edge = true;
+						}
+						CU_ASSERT_TRUE(Valid_Edge);
+
 						Parent_Vertex = Data->Parent[Parent_Vertex];
 
 						//Test that this new Parent_Vertex has not yet been visited during backtracking toward the Source
