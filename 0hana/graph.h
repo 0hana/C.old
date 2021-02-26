@@ -11,7 +11,7 @@ struct graph {
 		size_t const Edges;
 		struct graph_vertex_edge {
 			size_t const Destination;
-			float Weight;
+			double const Weight;
 		} * const Edge;
 	} * const Vertex;
 } * graph_transpose(struct graph const * const G)
