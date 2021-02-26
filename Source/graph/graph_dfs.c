@@ -1,6 +1,6 @@
 //Zero Hanami (C) 2021: graph_dfs.c
 
-#include "0hana/graph.h"
+#include "graph.h"
 
 enum color { black, grey, white };
 struct time_stamps { size_t Start, Finish; };

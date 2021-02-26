@@ -1,6 +1,6 @@
 //Zero Hanami (C) 2021: random.c
 
-#include "0hana/random.h"
+#include "random.h"
 
 size_t * random_array_of_unique_indices(size_t * Random, size_t const Modulus, size_t const Indices) {
 	//Check for parameter error or preallocated return array

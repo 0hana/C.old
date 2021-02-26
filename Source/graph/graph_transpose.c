@@ -1,6 +1,6 @@
 //Zero Hanami (C) 2021: graph_transpose.c
 
-#include "0hana/graph.h"
+#include "graph.h"
 
 struct graph * graph_transpose(struct graph const * const G) {
 	//Allocate return structures

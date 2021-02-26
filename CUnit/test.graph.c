@@ -2,6 +2,7 @@
 
 #include <stdio.h>
 #include "test.graph.h"
+#include "0hana/Source/random/random.h"
 #define VERTEX_LIMIT 100
 #define EDGE_LIMIT -1
 

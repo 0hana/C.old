@@ -1,7 +1,7 @@
 //Zero Hanami (C) 2021: graph_bfs.c
 
-#include "0hana/graph.h"
-#include "0hana/queue.h"
+#include "graph.h"
+#include "../queue/queue.h"
 
 struct graph_bfs_data * graph_bfs(struct graph const * const G, size_t const Source) {
 	//Allocate return structures

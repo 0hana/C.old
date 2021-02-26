@@ -1,6 +1,7 @@
 //Zero Hanami (C) 2021: graph_random.c
 
-#include "0hana/graph.h"
+#include "graph.h"
+#include "../random/random.h"
 
 struct graph * graph_random(size_t const Vertex_Limit, size_t const Edge_Limit) {
 	//Allocate return structures

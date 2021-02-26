@@ -1,11 +1,19 @@
 # Zero Hanami -- 0hana/C Makefile
 
+PARALLEL = # Set a job limit for parallel compilations, default is unlimited -- Do note recursion in this file
+
 DFLAGS = -Wall -Wextra -g
 CFLAGS = $(DFLAGS) -c
 OBJECT = 0hana/Build
 
 GRAPH  = $(OBJECT)/graph/graph_
-GRAPH_OBJECTS = $(GRAPH)bfs.o $(GRAPH)dfs.o $(GRAPH)free.o $(GRAPH)random.o $(GRAPH)transpose.o
+GRAPH_OBJECTS  = $(GRAPH)bfs.o $(GRAPH)dfs.o $(GRAPH)free.o $(GRAPH)random.o $(GRAPH)transpose.o
+
+QUEUE  = $(OBJECT)/queue/
+QUEUE_OBJECTS  = $(QUEUE)queue.o
+
+RANDOM = $(OBJECT)/random/
+RANDOM_OBJECTS = $(RANDOM)random.o
 
 Docker:
 	docker cp . hanami:/home
@@ -16,11 +24,11 @@ Init:
 	test -d Artifact || ( rm Artifact && mkdir Artifact )
 	test -e Build || mkdir Build
 	test -d Build || ( rm Build && mkdir Build )
-	make graph
+	make -j $(PARALLEL) graph queue random
 	make Build/test
 
-Build/test: Build/test.main.o Build/test.graph.o $(GRAPH_OBJECTS) Build/queue.o Build/random.o
-	gcc $(DFLAGS) Build/test.main.o Build/test.graph.o $(GRAPH_OBJECTS) Build/queue.o Build/random.o -o Build/test -lcunit
+Build/test: Build/test.main.o Build/test.graph.o $(GRAPH_OBJECTS) $(QUEUE_OBJECTS) $(RANDOM_OBJECTS)
+	gcc $(DFLAGS) Build/test.main.o Build/test.graph.o $(GRAPH_OBJECTS) $(QUEUE_OBJECTS) $(RANDOM_OBJECTS) -o Build/test -lcunit
 	@echo Make complete. Initiating CUnit via Valgrind
 	@bash -c "valgrind --leak-check=full --show-leak-kinds=all Build/test 2> >(tee Artifact/test.err) 1> >(tee Artifact/test.out)"
 
@@ -31,14 +39,16 @@ Build/test.graph.o: CUnit/test.graph.c
 	gcc $(CFLAGS) CUnit/test.graph.c -o Build/test.graph.o
 
 graph:
-	make -C Source/graph -f 0hana/Build/graph/Makefile
+	make -j $(PARALLEL) -C Source/graph -f 0hana/Build/graph/Makefile
 	@echo
 
-Build/queue.o: Source/queue.c
-	gcc $(CFLAGS) Source/queue.c -o Build/queue.o
+queue:
+	make -j $(PARALLEL) -C Source/queue -f 0hana/Build/queue/Makefile
+	@echo
 
-Build/random.o: Source/random.c
-	gcc $(CFLAGS) Source/random.c -o Build/random.o
+random:
+	make -j $(PARALLEL) -C Source/random -f 0hana/Build/random/Makefile
+	@echo
 
 re-run:
 	docker exec -w /home hanami valgrind --leak-check=full --show-leak-kinds=all Build/test
