@@ -25,14 +25,14 @@ Build/test.main.o: CUnit/test.main.c
 Build/test.graph.o: CUnit/test.graph.c
 	gcc $(CFLAGS) CUnit/test.graph.c -o Build/test.graph.o
 
-Build/graph.o: graph.c
-	gcc $(CFLAGS) graph.c -o Build/graph.o
+Build/graph.o: Source/graph.c
+	gcc $(CFLAGS) Source/graph.c -o Build/graph.o
 
-Build/queue.o: queue.c
-	gcc $(CFLAGS) queue.c -o Build/queue.o
+Build/queue.o: Source/queue.c
+	gcc $(CFLAGS) Source/queue.c -o Build/queue.o
 
-Build/random.o: random.c
-	gcc $(CFLAGS) random.c -o Build/random.o
+Build/random.o: Source/random.c
+	gcc $(CFLAGS) Source/random.c -o Build/random.o
 
 re-run:
 	docker exec -w /home hanami valgrind --leak-check=full --show-leak-kinds=all Build/test

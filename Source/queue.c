@@ -1,6 +1,6 @@
 //Zero Hanami (C) 2021: queue.c
 
-#include "queue.h"
+#include "0hana/queue.h"
 
 struct queue_node * queue_push(struct queue * const Q, size_t const Push) {
 	if(!Q->Tail) {
