@@ -13,7 +13,8 @@ struct graph {
 			double const Weight;
 		} * const Edge;
 	} * const Vertex;
-} * graph_transpose(struct graph const * const G)
+} * graph_copy(struct graph const * const G)
+, * graph_transpose(struct graph const * const G)
 , * graph_random(size_t const Vertex_Limit, size_t const Edge_Limit);
 
 void graph_free(struct graph * const G), graph_print(struct graph const * const G);

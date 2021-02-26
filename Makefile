@@ -7,7 +7,7 @@ CFLAGS = $(DFLAGS) -c
 OBJECT = 0hana/Build
 
 GRAPH  = $(OBJECT)/graph/graph_
-GRAPH_OBJECTS  = $(GRAPH)bfs.o $(GRAPH)dfs.o $(GRAPH)free.o $(GRAPH)random.o $(GRAPH)transpose.o
+GRAPH_OBJECTS  = $(GRAPH)bfs.o $(GRAPH)copy.o $(GRAPH)dfs.o $(GRAPH)random.o $(GRAPH)transpose.o
 
 QUEUE  = $(OBJECT)/queue/
 QUEUE_OBJECTS  = $(QUEUE)queue.o
@@ -52,6 +52,14 @@ random:
 
 re-run:
 	docker exec -w /home hanami valgrind --leak-check=full --show-leak-kinds=all Build/test
+
+report:
+	@docker exec -w /home/Artifact hanami stat -c %z test.err
+	@echo
+	@docker exec -w /home/Artifact hanami cat test.err
+	@echo
+	@docker exec -w /home/Artifact hanami stat -c %z test.out
+	@docker exec -w /home/Artifact hanami cat test.out
 
 clean:
 	docker exec -w /home hanami rm -rf Artifact Build
