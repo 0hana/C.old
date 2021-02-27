@@ -2,9 +2,11 @@
 
 DFLAGS = -Wall -Wextra -g
 CFLAGS = $(DFLAGS) -c
-BUILD   = 0hana/Build/random/
+BUILD  = 0hana/Build/random
+RANDOM = $(BUILD)/random
 
-queue: $(BUILD)random.o
+queue: $(RANDOM).o
 
-$(BUILD)random.o: random.c
-	gcc $(CFLAGS) random.c -o $(BUILD)random.o
+$(RANDOM).o: random.c
+	gcc $(CFLAGS) random.c -o $(RANDOM).o
+	@touch $(BUILD)

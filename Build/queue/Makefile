@@ -2,9 +2,11 @@
 
 DFLAGS = -Wall -Wextra -g
 CFLAGS = $(DFLAGS) -c
-BUILD   = 0hana/Build/queue/
+BUILD  = 0hana/Build/queue
+QUEUE  = $(BUILD)/queue
 
-queue: $(BUILD)queue.o
+queue: $(QUEUE).o
 
-$(BUILD)queue.o: queue.c
-	gcc $(CFLAGS) queue.c -o $(BUILD)queue.o
+$(QUEUE).o: queue.c
+	gcc $(CFLAGS) queue.c -o $(QUEUE).o
+	@touch $(BUILD)

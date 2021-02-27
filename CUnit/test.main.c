@@ -4,7 +4,12 @@
 #include <stdio.h>
 #include "test.graph.h"
 
-int main(void) {
+int main(int const Updates, char const * const Update[]) {
+
+	printf("\nSource Updates (%i): ", Updates - 1);
+	for(unsigned int U = 1; U < Updates; U++) printf("%s ", Update[U]);
+	printf("\n");
+	fflush(stdout);
 
 	if(CUE_SUCCESS != CU_initialize_registry()) return CU_get_error();
 
