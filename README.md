@@ -1,15 +1,16 @@
 # C
 0hana C Utilities
-
 ## Docker container setup
-You should be running Linux.
+Requires on a [`Linux`](https://github.com/torvalds/linux) host the installation of [`docker`](https://docs.docker.com/get-started/) and [`make`](https://www.gnu.org/software/make/), your user a member of the `docker` group 
 ```
-$ docker build -t hanami .
-$ docker run -dti --rm --name hanami hanami
+$ make docker-image container utilities
 ```
-
-### Testing your code in the Docker container
+### Compiling (and testing) code in the Docker container
 ```
 $ make
 ```
-Seriously. That's it.
+## Adding code
+Place new feature code in its appropriate [`Source/<directory>`](Source)  
+Place new testing code in its appropriate [`CUnit/<directory>`](CUnit)
+
+That's it.

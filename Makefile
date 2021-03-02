@@ -18,8 +18,17 @@ RANDOM_OBJECTS = $(RANDOM)random.o
 
 
 Docker:
-	docker cp . hanami:/home
-	docker exec -w /home hanami make Init
+	@if ! (id | awk '{ print $3 }' | grep "(docker)" >/dev/null); then echo >&2 "You must be a member of the docker group to use the container system"; fi
+	@docker cp . hanami:/home
+	@docker exec -w /home hanami make Init
+
+docker-image:
+	@if ! (id | awk '{ print $3 }' | grep "(docker)" >/dev/null); then echo >&2 "You must be a member of the docker group to use the container system"; fi
+	@printf "FROM alpine:3 as compile\nRUN apk add bash coreutils cunit cunit-dev gcc libc-dev make valgrind\n" | docker build -t hanami -
+
+container:
+	@if ! (id | awk '{ print $3 }' | grep "(docker)" >/dev/null); then echo >&2 "You must be a member of the docker group to use the container system"; fi
+	@docker run -dti --rm --name hanami hanami
 
 # Init assumes filesystem keeps track of change time in nanoseconds (and that at least 1 nanosecond passes before any recipes are built) -- this is a dependency of communication between build system and testing facility to minimize the number of tests that need to be run
 
@@ -68,4 +77,7 @@ report:
 	@docker exec -w /home/Artifact hanami cat test.out
 
 clean:
-	docker exec -w /home hanami rm -rf Artifact Build
+	docker exec -w /home hanami rm -rf *
+
+utilities:
+	@if ! (id | awk '{ print $3 }' | grep "(docker)" >/dev/null); then echo >&2 "You must be a member of the docker group to use the container system"; fi
