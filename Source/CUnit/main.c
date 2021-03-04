@@ -7,7 +7,7 @@
 int main(int const Updates, char const * const Update[]) {
 
 	printf("\nSource Updates (%i): ", Updates - 1);
-	for(unsigned int U = 1; U < Updates; U++) printf("%s ", Update[U]);
+	for(unsigned U = 1; U < (unsigned)Updates; U++) printf("%s ", Update[U]);
 	printf("\n");
 	fflush(stdout);
 
