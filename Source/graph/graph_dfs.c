@@ -28,9 +28,9 @@ void graph_dfs_visit(struct graph const * const G, size_t const Current_Vertex, 
 }
 
 struct graph_dfs_data * graph_dfs(struct graph const * const G, size_t const Source) {
-	struct graph_dfs_data * Data = malloc(sizeof(struct graph_dfs_data));
+	struct graph_dfs_data * Data = (struct graph_dfs_data *)malloc(sizeof(struct graph_dfs_data));
 	if(!Data) return NULL;
-	*(size_t **)&Data->Topological_Order = malloc(sizeof(size_t) * G->Vertices);
+	*(size_t **)&Data->Topological_Order = (size_t *)malloc(sizeof(size_t) * G->Vertices);
 	if(!Data->Topological_Order) return free(Data), NULL;
 	*(enum boolean *)&Data->Cyclic = false;
 

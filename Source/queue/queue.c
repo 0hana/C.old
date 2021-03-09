@@ -4,11 +4,11 @@
 
 struct queue_node * queue_push(struct queue * const Q, size_t const Push) {
 	if(!Q->Tail) {
-		Q->Tail = malloc(sizeof(struct queue_node));
+		Q->Tail = (struct queue_node *)malloc(sizeof(struct queue_node));
 		if(!Q->Tail) return NULL;
 		Q->Head = Q->Tail;
 	}
-	else if(!(Q->Tail->Next = malloc(sizeof(struct queue_node)))) return NULL;
+	else if(!(Q->Tail->Next = (struct queue_node *)malloc(sizeof(struct queue_node)))) return NULL;
 	else Q->Tail = Q->Tail->Next;
 	Q->Tail->Next = NULL;
 	Q->Tail->Data = Push;

@@ -4,7 +4,7 @@
 
 size_t * random_array_of_unique_indices(size_t * Random, size_t const Modulus, size_t const Indices) {
 	//Check for parameter error or preallocated return array
-	if(Indices > Modulus || !(Random = Random ? Random : malloc(sizeof(size_t) * Indices))) return NULL;
+	if(Indices > Modulus || !(Random = Random ? Random : (size_t *)malloc(sizeof(size_t) * Indices))) return NULL;
 
 	/*
 		I'm kind of surprised I didn't think of this yesterday, but thanks

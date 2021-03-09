@@ -3,7 +3,7 @@
 ## Docker container setup
 Requires on a [`Linux`](https://github.com/torvalds/linux) host the installation of [`docker`](https://docs.docker.com/get-started/) and [`make`](https://www.gnu.org/software/make/), your user a member of the `docker` group 
 ```
-$ make docker container utilities
+$ make docker container
 ```
 ### Compiling (and testing) code in the Docker container
 ```

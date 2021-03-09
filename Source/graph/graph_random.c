@@ -5,16 +5,16 @@
 
 struct graph * graph_random(size_t const Vertex_Limit, size_t const Edge_Limit) {
 	//Allocate return structures
-	struct graph * Random = malloc(sizeof(struct graph));
+	struct graph * Random = (struct graph *)malloc(sizeof(struct graph));
 	if(!Random) return NULL;
-	*(struct graph_vertex **)&Random->Vertex = malloc(sizeof(struct graph_vertex) * (*(size_t *)&Random->Vertices = (unsigned)rand() % Vertex_Limit));
+	*(struct graph_vertex **)&Random->Vertex = (struct graph_vertex *)malloc(sizeof(struct graph_vertex) * (*(size_t *)&Random->Vertices = (unsigned)rand() % Vertex_Limit));
 	if(!Random->Vertex) return free(Random), NULL;
 	else {
 		
 		//Determine number of edges per random vertex and Allocate edge array for each random vertex
 		
 		for(size_t V = 0; V < Random->Vertices; V++) {
-			*(struct graph_vertex_edge **)&Random->Vertex[V].Edge = malloc(sizeof(struct graph_vertex_edge) * (*(size_t *)&Random->Vertex[V].Edges = (unsigned)rand() % Random->Vertices % Edge_Limit));
+			*(struct graph_vertex_edge **)&Random->Vertex[V].Edge = (struct graph_vertex_edge *)malloc(sizeof(struct graph_vertex_edge) * (*(size_t *)&Random->Vertex[V].Edges = (unsigned)rand() % Random->Vertices % Edge_Limit));
 			if(!Random->Vertex[V].Edge) {
 				//Release all allocations prior to malloc failure
 				while(V-- > 0) free(Random->Vertex[V].Edge);

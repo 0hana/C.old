@@ -5,11 +5,11 @@
 
 struct graph_bfs_data * graph_bfs(struct graph const * const G, size_t const Source) {
 	//Allocate return structures
-	struct graph_bfs_data * const Data = malloc(sizeof(struct graph_bfs_data));
+	struct graph_bfs_data * const Data = (struct graph_bfs_data *)malloc(sizeof(struct graph_bfs_data));
 	if(!Data) return NULL;
-	*(size_t **)&Data->Distance = malloc(sizeof(size_t) * G->Vertices);
+	*(size_t **)&Data->Distance = (size_t *)malloc(sizeof(size_t) * G->Vertices);
 	if(!Data->Distance) return free(Data), NULL;
-	*(size_t **)&Data->Parent = malloc(sizeof(size_t) * G->Vertices);
+	*(size_t **)&Data->Parent = (size_t *)malloc(sizeof(size_t) * G->Vertices);
 	if(!Data->Parent) return free(*(size_t **)&Data->Distance), free(Data), NULL;
 
 	for(size_t V = 0; V < G->Vertices; V++) {

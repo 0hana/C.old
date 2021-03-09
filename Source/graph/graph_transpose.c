@@ -4,9 +4,9 @@
 
 struct graph * graph_transpose(struct graph const * const G) {
 	//Allocate return structures
-	struct graph * Transpose = malloc(sizeof(struct graph));
+	struct graph * Transpose = (struct graph *)malloc(sizeof(struct graph));
 	if(!Transpose) return NULL;
-	*(struct graph_vertex **)&Transpose->Vertex = malloc(sizeof(struct graph_vertex) * G->Vertices);
+	*(struct graph_vertex **)&Transpose->Vertex = (struct graph_vertex *)malloc(sizeof(struct graph_vertex) * G->Vertices);
 	if(!Transpose->Vertex) return free(Transpose), NULL;
 	else {
 		//Determine number of edges per transpose vertex
@@ -14,7 +14,7 @@ struct graph * graph_transpose(struct graph const * const G) {
 		for(size_t V = 0; V < G->Vertices; V++) for(size_t E = 0; E < G->Vertex[V].Edges; E++) (*(size_t *)&Transpose->Vertex[G->Vertex[V].Edge[E].Destination].Edges)++;
 		//Allocate edge array for each transpose vertex
 		for(size_t V = 0; V < G->Vertices; V++) {
-			*(struct graph_vertex_edge **)&Transpose->Vertex[V].Edge = malloc(sizeof(struct graph_vertex_edge) * Transpose->Vertex[V].Edges);
+			*(struct graph_vertex_edge **)&Transpose->Vertex[V].Edge = (struct graph_vertex_edge *)malloc(sizeof(struct graph_vertex_edge) * Transpose->Vertex[V].Edges);
 			if(!Transpose->Vertex[V].Edge) {
 				//Release all allocations prior to malloc failure
 				while(V-- > 0) free(Transpose->Vertex[V].Edge);
