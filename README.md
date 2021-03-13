@@ -10,7 +10,7 @@ $ make docker container
 $ make
 ```
 ## Adding code
-Place new feature code in its appropriate [`Source/<directory>`](Source)  
-Place new testing code in its appropriate [`Source/CUnit/<directory>`](Source/CUnit)
+Place new code files in their appropriate [`Source/<directory>`](Source)  
+Prefix CUnit file and associated function names with `CU_`
 
 That's it.
