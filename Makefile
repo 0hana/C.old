@@ -21,7 +21,7 @@ ifeq "$(DOCKER)" 'CONTAINED'
 		fi;\
 	done;\
 	printf "\nUpdates ($$(echo $${UPDATES} | wc -w)): $${UPDATES}\n\n";\
-	make UPDATES="$${UPDATES}" 0hana/run
+	make UPDATES="$${UPDATES}" run
 
 # To add later:
 # In the files not among the updates, check for the presense of any updated function being called -- any single one updated function is sufficient
@@ -41,11 +41,11 @@ docker:
 container:
 	@docker run -dti --rm --name hanami hanami
 
-0hana/run: $(OBJECT)
+run: $(OBJECT)
 	@printf "\nInitiating Link ... Linking!\n\n"
 	@echo gcc $^ -Wall -Wextra -g -o $@ -lcunit
 	@time -f %E gcc $^ -Wall -Wextra -g -o $@ -lcunit
-	@valgrind --leak-check=full --show-leak-kinds=all --trace-children=yes 0hana/run $${UPDATES}
+	@valgrind --leak-check=full --show-leak-kinds=all --trace-children=yes ./run $${UPDATES}
 
 Build/%.o: Source/%.c Build/%.d # (e_e)
 	gcc $< -Wall -Wextra -g -c -o $@

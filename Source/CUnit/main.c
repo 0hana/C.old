@@ -2,7 +2,7 @@
 
 #include <CUnit/Basic.h>
 #include <stdio.h>
-#include "test.graph.h"
+#include "CU_graph.h"
 
 int main(int const Updates, char const * const Update[]) {
 

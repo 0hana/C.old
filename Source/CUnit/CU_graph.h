@@ -3,7 +3,7 @@
 #ifndef _GRAPH_TEST
 #define _GRAPH_TEST
 #include <CUnit/CUnit.h>
-#include "0hana/Source/graph/graph.h"
+#include "0hana/graph/graph.h"
 
 int init_graph_suite(void);
 int clean_graph_suite(void);
