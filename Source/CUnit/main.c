@@ -3,6 +3,7 @@
 #include <CUnit/Basic.h>
 #include <stdio.h>
 #include "CU_graph.h"
+#include "CU_queue.h"
 
 int main(int const Updates, char const * const Update[]) {
 
@@ -17,6 +18,7 @@ int main(int const Updates, char const * const Update[]) {
 	if(!Graph_Suite) return CU_cleanup_registry(), CU_get_error();
 
 	if(!CU_add_test(Graph_Suite, "graph_random", test_graph_random)
+	|| !CU_add_test(Graph_Suite, "queue_free", CU_queue_free)
 	|| !CU_add_test(Graph_Suite, "graph_transpose", test_graph_transpose)
 	|| !CU_add_test(Graph_Suite, "graph_bfs", test_graph_bfs))
 		return CU_cleanup_registry(), CU_get_error();
