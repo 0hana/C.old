@@ -1,5 +1,6 @@
 # C
-0hana C Utilities
+0hana C Utilities  
+[![Compile and CUnit](https://github.com/0hana/C/actions/workflows/Compile%20and%20CUnit.yml/badge.svg)](https://github.com/0hana/C/actions/workflows/Compile%20and%20CUnit.yml)
 ## Docker container setup
 Requires on a [`Linux`](https://github.com/torvalds/linux) host the installation of [`docker`](https://docs.docker.com/get-started/) and [`make`](https://www.gnu.org/software/make/), your user a member of the `docker` group 
 ```

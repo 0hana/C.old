@@ -1,0 +1,15 @@
+name: Compile and CUnit
+on: push
+jobs:
+  Compile-and-CUnit:
+    name: Compile and CUnit
+    runs-on: ubuntu-latest
+    steps:
+      - name: git clone and checkout 0hana/C
+        uses: actions/checkout@v2
+
+      - name: make docker container
+        run: make docker container
+
+      - name: Compile and CUnit
+        run: make
