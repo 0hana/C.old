@@ -14,13 +14,19 @@ int main(int const Updates, char const * const Update[]) {
 
 	if(CUE_SUCCESS != CU_initialize_registry()) return CU_get_error();
 
-	CU_pSuite Graph_Suite = CU_add_suite("Graph", init_graph_suite, clean_graph_suite);
-	if(!Graph_Suite) return CU_cleanup_registry(), CU_get_error();
+	CU_pSuite
+		Graph_Suite,
+		Queue_Suite;
+
+	if(!(Queue_Suite = CU_add_suite("Queue", init_queue_suite, clean_queue_suite))
+	|| !(Graph_Suite = CU_add_suite("Graph", init_graph_suite, clean_graph_suite)))
+		return CU_cleanup_registry(), CU_get_error();
 
 	if(!CU_add_test(Graph_Suite, "graph_random", test_graph_random)
-	|| !CU_add_test(Graph_Suite, "queue_free", CU_queue_free)
 	|| !CU_add_test(Graph_Suite, "graph_transpose", test_graph_transpose)
-	|| !CU_add_test(Graph_Suite, "graph_bfs", test_graph_bfs))
+	|| !CU_add_test(Graph_Suite, "graph_bfs", test_graph_bfs)
+
+	|| !CU_add_test(Queue_Suite, "queue_free", CU_queue_free))
 		return CU_cleanup_registry(), CU_get_error();
 
 	return CU_basic_set_mode(CU_BRM_VERBOSE), CU_basic_run_tests(), CU_cleanup_registry(), CU_get_error();

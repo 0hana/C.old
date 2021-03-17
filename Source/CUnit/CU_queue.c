@@ -1,7 +1,10 @@
 #include <stdio.h>
 #include "CU_queue.h"
 
-void CU_queue_free(void){
+int init_queue_suite(void) { return 0; }
+int clean_queue_suite(void) { return 0; }
+
+void CU_queue_free(void) {
 
   struct queue Q = {.Head = NULL, .Tail = NULL};
   for(int i = 0; i < 10; i++){
