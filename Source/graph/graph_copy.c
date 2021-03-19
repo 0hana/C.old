@@ -5,26 +5,26 @@
 struct graph * graph_copy(struct graph const * const G) {
 	struct graph * Copy = (struct graph *)malloc(sizeof(struct graph));
 	if(!Copy) return NULL;
-	*(size_t *)&Copy->Vertices = G->Vertices;
-	*(struct graph_vertex **)&G->Vertex = (struct graph_vertex *)malloc(sizeof(struct graph_vertex) * G->Vertices);
-	if(!Copy->Vertex) return free(Copy), NULL;
-	for(size_t V = 0; V < G->Vertices; V++) {
-		*(struct graph_vertex_edge **)&Copy->Vertex[V].Edge = (struct graph_vertex_edge *)malloc(sizeof(struct graph_vertex_edge) * G->Vertex[V].Edges);
-		if(!Copy->Vertex[V].Edge) {
-			while(V-- > 0) free(Copy->Vertex[V].Edge);
-			return free(Copy->Vertex), free(Copy), NULL;
+	*(size_t *)&Copy->Terms = G->Terms;
+	*(struct graph_term **)&G->Term = (struct graph_term *)malloc(sizeof(struct graph_term) * G->Terms);
+	if(!Copy->Term) return free(Copy), NULL;
+	for(size_t V = 0; V < G->Terms; V++) {
+		*(struct graph_term_link **)&Copy->Term[V].Link = (struct graph_term_link *)malloc(sizeof(struct graph_term_link) * G->Term[V].Links);
+		if(!Copy->Term[V].Link) {
+			while(V-- > 0) free(Copy->Term[V].Link);
+			return free(Copy->Term), free(Copy), NULL;
 		}
-		*(size_t *)&Copy->Vertex[V].Edges = G->Vertex[V].Edges;
-		for(size_t E = 0; E < G->Vertex[V].Edges; E++) {
-			*(size_t *)&Copy->Vertex[V].Edge[E].Destination = G->Vertex[V].Edge[E].Destination;
-			*(double *)&Copy->Vertex[V].Edge[E].Weight = G->Vertex[V].Edge[E].Weight;
+		*(size_t *)&Copy->Term[V].Links = G->Term[V].Links;
+		for(size_t E = 0; E < G->Term[V].Links; E++) {
+			*(size_t *)&Copy->Term[V].Link[E].Term = G->Term[V].Link[E].Term;
+			*(double *)&Copy->Term[V].Link[E].Real = G->Term[V].Link[E].Real;
 		}
 	}
 	return Copy;
 }
 
 void graph_free(struct graph * const G) {
-	for(size_t V = 0; V < G->Vertices; V++) free(G->Vertex[V].Edge);
-	free(G->Vertex);
+	for(size_t V = 0; V < G->Terms; V++) free(G->Term[V].Link);
+	free(G->Term);
 	free(G);
 }

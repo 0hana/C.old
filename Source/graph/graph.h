@@ -4,18 +4,20 @@
 #define _GRAPH
 #include <stdlib.h>
 
+struct graph_term_link {
+	size_t const Term;
+	double const Real;
+};
+struct graph_term {
+	size_t const Links;
+	struct graph_term_link * const Link;
+};
 struct graph {
-	size_t const Vertices;
-	struct graph_vertex {
-		size_t const Edges;
-		struct graph_vertex_edge {
-			size_t const Destination;
-			double const Weight;
-		} * const Edge;
-	} * const Vertex;
+	size_t const Terms;
+	struct graph_term * const Term;
 } * graph_copy(struct graph const * const G)
 , * graph_transpose(struct graph const * const G)
-, * graph_random(size_t const Vertex_Limit, size_t const Edge_Limit);
+, * graph_random(size_t const Term_Limit, size_t const Link_Limit);
 
 void graph_free(struct graph * const G), graph_print(struct graph const * const G);
 
