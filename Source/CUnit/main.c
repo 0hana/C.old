@@ -1,15 +1,21 @@
-//Zero Hanami (C) 2021: main.graph.c
+//Zero Hanami (C) 2021: main.c
 
 #include <CUnit/Basic.h>
 #include <stdio.h>
-#include "CU_graph.h"
-#include "CU_queue.h"
+#include <time.h>
+#include "0hana/graph/CUnit/CU_graph.h"
+#include "0hana/queue/CUnit/CU_queue.h"
 
 int main(int const Updates, char const * const Update[]) {
 
-	printf("\nSource Updates (%i): ", Updates - 1);
+	printf("Source Updates (%i): ", Updates - 1);
 	for(unsigned U = 1; U < (unsigned)Updates; U++) printf("%s ", Update[U]);
 	printf("\n");
+
+	time_t Seed = time(0);
+	srand(Seed);
+	printf("Seed = %li\n", Seed);
+
 	fflush(stdout);
 
 	if(CUE_SUCCESS != CU_initialize_registry()) return CU_get_error();

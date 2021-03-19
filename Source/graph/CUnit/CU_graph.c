@@ -1,7 +1,7 @@
 //Zero Hanami (C) 2021: CU_graph.c
 
 #include <stdio.h>
-#include "0hana/CUnit/CU_graph.h"
+#include "CU_graph.h"
 #include "0hana/random/random.h"
 #define VERTEX_LIMIT 100
 #define EDGE_LIMIT -1
@@ -12,10 +12,6 @@ int clean_graph_suite(void) { return 0; }
 void CU_graph_random(void) {
 
 	unsigned int const Failures = CU_get_number_of_failures();
-	time_t Seed = time(0);
-	srand(Seed);
-
-	printf(" (Seed = %lu) ", Seed);
 
 	for(size_t I = 0; I < 1000; I++) {
 

@@ -1,7 +1,7 @@
 //Zero Hanami (C) 2021: CU_graph.h
 
-#ifndef _GRAPH_TEST
-#define _GRAPH_TEST
+#ifndef _CU_GRAPH
+#define _CU_GRAPH
 #include <CUnit/CUnit.h>
 #include "0hana/graph/graph.h"
 
@@ -12,4 +12,4 @@ void CU_graph_bfs(void);
 void CU_graph_random(void);
 void CU_graph_transpose(void);
 
-#endif//_GRAPH_TEST
+#endif//_CU_GRAPH
