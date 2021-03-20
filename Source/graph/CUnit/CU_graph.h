@@ -8,6 +8,8 @@
 int init_graph_suite(void);
 int clean_graph_suite(void);
 
+void CU_graph_add_term(void);
+void CU_graph_add_term_link(void);
 void CU_graph_bfs(void);
 void CU_graph_random(void);
 void CU_graph_transpose(void);

@@ -17,7 +17,9 @@ struct graph {
 	struct graph_term * const Term;
 } * graph_copy(struct graph const * const G)
 , * graph_transpose(struct graph const * const G)
-, * graph_random(size_t const Term_Limit, size_t const Link_Limit);
+, * graph_random(size_t const Term_Limit, size_t const Link_Limit)
+, * graph_add_term(struct graph * const G)
+, * graph_add_term_link(struct graph * const G, size_t const Root, size_t const Term, double const Real);//The Root is the Term the Link emerges from
 
 void graph_free(struct graph * const G), graph_print(struct graph const * const G);
 
