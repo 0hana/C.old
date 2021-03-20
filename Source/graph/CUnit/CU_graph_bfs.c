@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include "CU_graph.h"
 #include "0hana/random/random.h"
-#define VERTEX_LIMIT 100
+#define VERTEX_LIMIT 10
 #define EDGE_LIMIT -1
 
 void CU_graph_bfs(void) {
@@ -17,7 +17,7 @@ void CU_graph_bfs(void) {
 
 	unsigned int const Failures = CU_get_number_of_failures();
 
-	for(size_t I = 0; I < 1000; I++) {
+	for(size_t I = 0; I < 100; I++) {
 
 		struct graph * const G = graph_random(VERTEX_LIMIT, EDGE_LIMIT);
 		CU_ASSERT_PTR_NOT_NULL_FATAL(G);
