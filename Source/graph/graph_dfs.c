@@ -13,7 +13,7 @@ void graph_dfs_visit(struct graph const * const G, size_t const Current_Term, si
 		switch(Color[G->Term[Current_Term].Link[E].Term]) {
 			case white: graph_dfs_visit(G, G->Term[Current_Term].Link[E].Term, Time, Color, Time_Stamps, Topological_Iterator, Data);
 				break;
-			case grey: *(enum boolean *)&Data->Cyclic = true;
+			case grey: *(bool *)&Data->Cyclic = true;
 				break;
 			case black:
 				break;
@@ -32,7 +32,7 @@ struct graph_dfs_data * graph_dfs(struct graph const * const G, size_t const Sou
 	if(!Data) return NULL;
 	*(size_t **)&Data->Topological_Order = (size_t *)malloc(sizeof(size_t) * G->Terms);
 	if(!Data->Topological_Order) return free(Data), NULL;
-	*(enum boolean *)&Data->Cyclic = false;
+	*(bool *)&Data->Cyclic = false;
 
 	enum color Color[G->Terms];
 	struct time_stamps Time_Stamps[G->Terms];
@@ -53,7 +53,7 @@ struct graph_dfs_data * graph_dfs(struct graph const * const G, size_t const Sou
 }
 
 void graph_dfs_data_free(struct graph_dfs_data * const D) {
-	free((enum boolean *)&D->Cyclic);
+	free((bool *)&D->Cyclic);
 	free((size_t *)D->Topological_Order);
 	free(D);
 }

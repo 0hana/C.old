@@ -3,6 +3,7 @@
 #ifndef _GRAPH
 #define _GRAPH
 #include <stdlib.h>
+#include "0hana/types.h"
 
 struct graph_term_link {
 	size_t const Term;
@@ -33,7 +34,7 @@ void graph_bfs_data_free(struct graph_bfs_data * const D);
 
 
 struct graph_dfs_data {
-	enum boolean { true = ~0, false = 0 } const Cyclic;
+	bool const Cyclic;
 	size_t const * const Topological_Order;
 } * graph_dfs(struct graph const * const G, size_t const Source);
 

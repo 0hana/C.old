@@ -37,7 +37,7 @@ void CU_graph_bfs(void) {
 				CU_ASSERT_TRUE(IFF((Data->Distance[NON_SOURCE_VERTEX] == (size_t)-1), (Data->Parent[NON_SOURCE_VERTEX] == NON_SOURCE_VERTEX)));
 
 				//Each parent in backtracking should only be visited once, or it is not a path (and therefore not a shortest path--considering only edge count) by definition
-				enum boolean Visited[G->Terms];
+				bool Visited[G->Terms];
 				for(size_t U = 0; U < G->Terms; U++) Visited[U] = false;
 
 				size_t Parent_Term = Data->Parent[NON_SOURCE_VERTEX];
@@ -49,7 +49,7 @@ void CU_graph_bfs(void) {
 				if(Parent_Term != NON_SOURCE_VERTEX) {
 					Counter = 1;
 
-					enum boolean Valid_Link = false;
+					bool Valid_Link = false;
 					for(size_t E = 0; E < G->Term[Parent_Term].Links; E++) {
 						if(G->Term[Parent_Term].Link[E].Term == NON_SOURCE_VERTEX) Valid_Link = true;
 					}
