@@ -8,7 +8,11 @@
 
 struct graph_link { size_t _(const) Term, Parallels; double _(const) * _(const) Real; };
 
+struct graph_link * graph_link_allocate(size_t const Links);
+
 struct graph_node { size_t _(const) Links; struct graph_link * _(const) Link; };
+
+struct graph_node * graph_node_allocate(size_t const Nodes);
 
 struct graph { size_t _(const) Nodes; struct graph_node * _(const) Node; };
 
