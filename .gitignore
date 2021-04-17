@@ -53,3 +53,6 @@ dkms.conf
 
 # CUnit execution report files
 Artifact/*
+
+# Editor swap files
+*.swp
