@@ -28,9 +28,9 @@ struct graph * graph_transpose(struct graph const * const Original) {
 
 		//Initialize link variables to enable graph_free(T) cleanup if malloc fails ahead
 		for(size_t L = 0; L < T->Node[N].Links; L++) {
-			_relax(T->Node[N].Link[L].Term, size_t)      =   -1;
-			_relax(T->Node[N].Link[L].Real, double *)    = NULL;
-			_relax(T->Node[N].Link[L].Parallels, size_t) =    0;
+			_relax(T->Node[N].Link[L].Term, size_t)   =   -1;
+			_relax(T->Node[N].Link[L].Reals, size_t)  =    0;
+			_relax(T->Node[N].Link[L].Real, double *) = NULL;
 		}
 	}
 
@@ -47,11 +47,11 @@ struct graph * graph_transpose(struct graph const * const Original) {
 		for(size_t L = 0; L < O->Node[N].Links; L++) {
 			#define X O->Node[N].Link[L].Term
 			_relax(T->Node[X].Link[I[X]].Term, size_t) = O->Node[N].Link[L].Term;
-			_relax(T->Node[X].Link[I[X]].Parallels, size_t) = O->Node[N].Link[L].Parallels;
-			_relax(T->Node[X].Link[I[X]].Real, double *) = (double *)malloc(sizeof(double) * T->Node[X].Link[I[X]].Parallels);
+			_relax(T->Node[X].Link[I[X]].Reals, size_t) = O->Node[N].Link[L].Reals;
+			_relax(T->Node[X].Link[I[X]].Real, double *) = (double *)malloc(sizeof(double) * T->Node[X].Link[I[X]].Reals);
 			if(!T->Node[X].Link[I[X]].Real) return (struct graph *)(graph_free(T), free(I), NULL);
 
-			for(size_t P = 0; P < T->Node[X].Link[I[X]].Parallels; P++) _relax(T->Node[X].Link[I[X]].Real[P], double) = O->Node[N].Link[L].Real[P];
+			for(size_t R = 0; R < T->Node[X].Link[I[X]].Reals; R++) _relax(T->Node[X].Link[I[X]].Real[R], double) = O->Node[N].Link[L].Real[R];
 			I[X]++;
 			#undef X
 		}
