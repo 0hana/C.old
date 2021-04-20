@@ -26,7 +26,7 @@ struct graph * graph_clone(struct graph const * const Original) {
 		_relax(C->Node[N].Links, size_t) = O->Node[N].Links;
 		for(size_t L = 0; L < C->Node[N].Links; L++) {
 			//Allocate parallel real arrays
-			_relax(C->Node[N].Link[L].Real, double *) = (double *)malloc(sizeof(double) * O->Node[N].Link[L].Parallels);
+			_relax(C->Node[N].Link[L].Real, double *) = (double *)malloc(sizeof(double) * O->Node[N].Link[L].Reals);
 			if(!C->Node[N].Link[L].Real) {
 				//Release memory on failure
 				while(N > 0) {
@@ -36,9 +36,9 @@ struct graph * graph_clone(struct graph const * const Original) {
 				return (struct graph *)(free(C->Node), free(C), NULL);
 			}
 
-			_relax(C->Node[N].Link[L].Parallels, size_t) = O->Node[N].Link[L].Parallels;
-			for(size_t P = 0; P < C->Node[N].Link[L].Parallels; P++) {
-				_relax(C->Node[N].Link[L].Real[P], double) = O->Node[N].Link[L].Real[P];
+			_relax(C->Node[N].Link[L].Reals, size_t) = O->Node[N].Link[L].Reals;
+			for(size_t R = 0; R < C->Node[N].Link[L].Reals; R++) {
+				_relax(C->Node[N].Link[L].Real[R], double) = O->Node[N].Link[L].Real[R];
 			}
 		}
 	}
