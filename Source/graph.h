@@ -20,6 +20,8 @@ struct graph
 
 void graph_free(struct graph * const Graph_Memory);
 
+bool graph_equality(struct graph const * const A, struct graph const * const B);
+
 //#include "0hana/graph/random_graph.h"
 
 //BFS_Data --
