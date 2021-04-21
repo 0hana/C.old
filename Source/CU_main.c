@@ -3,7 +3,7 @@
 #include <CUnit/Basic.h>
 #include <stdio.h>
 #include <time.h>
-#include "0hana/graph/CU_graph.h"
+#include "0hana/CUnit/CU_graph.h"
 
 int main(int words, char * word[]) {
 	time_t Seed = time(0);

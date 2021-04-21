@@ -4,7 +4,7 @@
 #define _graph
 
 #include <stdlib.h>
-#include "0hana/types.h"
+#include "types.h"
 
 struct graph_link { size_t _(const) Term, Reals; double _(const) * _(const) Real; };
 struct graph_link * graph_link_allocate(size_t const Links);

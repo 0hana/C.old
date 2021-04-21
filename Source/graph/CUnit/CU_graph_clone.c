@@ -1,9 +1,8 @@
 //Zero Hanami (C) 2021: CU_graph_clone.c
 
-#include "CU_graph.h"
+#include "0hana/CUnit/CU_graph.h"
 
 void CU_graph_clone(void) {
-
 	struct graph Static0 = { .Nodes = 0, .Node = NULL };
 
 	struct graph_link S1N1L = {

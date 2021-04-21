@@ -1,9 +1,8 @@
 //Zero Hanami (C) 2021: CU_graph_equality.c
 
-#include "CU_graph.h"
+#include "0hana/CUnit/CU_graph.h"
 
 void CU_graph_equality(void) {
-
 	struct graph Static0 = { .Nodes = 0, .Node = NULL };
 
 	CU_ASSERT_TRUE(graph_equality(&Static0, &Static0));
