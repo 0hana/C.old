@@ -1,42 +1,29 @@
-//Zero Hanami (C) 2021: random.c
+//Zero Hanami (C) 2021: random_unique_indexes_array.c
 
 #include "0hana/random.h"
 
-size_t * random_unique_indexes_array(size_t const Indexes, size_t const Variation) {
-	size_t
-		N = Indexes,
-		#define M Modulus
-		M = Indexes + Variation;
-	if(!M) return NULL;
+size_t * random_unique_indexes_array(size_t const Indexes, size_t Variation) {
+	size_t * const Array = (size_t *)nalloc(sizeof(size_t) * Indexes);
+	if(!Array) return NULL;
 
-	size_t * const Random = (size_t *)malloc(sizeof(size_t) * Indexes);
-	if(!Random) return NULL;
+	size_t * const Card = (size_t *)nalloc(sizeof(size_t) * Indexes);
+	if(!Card) return (size_t *)(free(Array), NULL);
 
-	size_t * const Card = (size_t *)malloc(sizeof(size_t) * Indexes);
-	if(!Card) return (size_t *)(free(Random), NULL);
-
-	/*
-		The deck of cards solves the final outcome distribution bias by
-		randomly selecting the order in which the Indexes are selected.
-
-		-- Zero
-	*/
-
-	//Generate bounded random increments
-	for(size_t I = 0; I < Indexes; I++) Card[I] = I;
-	while(N > 0) {
-		size_t R = (unsigned)rand() % N;
-		Random[Card[R]] = (unsigned)rand() % (M - N + 1) + 1;
-		M -= Random[Card[R]];
-		Card[R] = Card[--N];
+	Array[0] = 0;
+	 Card[0] = 0;
+	for(size_t I = 1; I < Indexes; I++) {
+		Array[I] = 1;
+		 Card[I] = I;
 	}
 
-	//Free the Card array
-	free(Card);
+	for(size_t I = Indexes, R, V; (I > 0) & (Variation > 0); Card[R] = Card[--I]) {
+		R = random % I;
+		V = random % (Variation + 1);
+		Variation -= V;
+		Array[Card[R]] += V;
+	}
 
-	//Sum the increments ascending to generate the random selection list
-	Random[0] -= 1;
-	for(N = 1; N < Indexes; N++) Random[N] = Random[N] + Random[N - 1];
+	for(size_t I = 1; I < Indexes; I++) Array[I] += Array[I - 1];
 
-	return Random;
+	return (size_t *)(free(Card), Array);
 }

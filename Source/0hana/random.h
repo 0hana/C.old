@@ -2,9 +2,12 @@
 
 #ifndef _random
 #define _random
-#include <stdlib.h>
-#include <time.h>
 
-size_t * random_unique_indexes_array(size_t const Indexes, size_t const Variation);
+#include <time.h>
+#include "memory.h"
+
+#define random rand()
+
+size_t * random_unique_indexes_array(size_t const Indexes, size_t Variation);
 
 #endif//_random
