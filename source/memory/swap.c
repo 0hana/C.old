@@ -14,7 +14,7 @@ v swap(x Size, o c O1, o c O2) {
 
 test {
 	#define Number 0x10000
-	
+
 	int Array_0[Number];
 	int Array_1[Number];
 
