@@ -1,4 +1,4 @@
-# 0hana/C
+# 0hana/C  [![build and test](https://github.com/0hana/C/actions/workflows/build-and-test.yml/badge.svg?branch=main)](https://github.com/0hana/C/actions/workflows/build-and-test.yml)
 Personal C Utility APIs
 
 ## Setup
@@ -21,7 +21,7 @@ Run `make`
 ## make
 Remembering to do ***"that one thing"*** before you do ***"that other thing"*** is extremely error prone.
 It can also be difficult to reorganize code without breaking a good deal of it.
-So `make` and methodology handle all "that".
+So `make` and methodology handle all ***"that"***.
 
 What does `make` do (using [`makefile`](makefile))?
 - Determine if we want to `make` in a container (default), and if so:
