@@ -35,11 +35,11 @@ endif
 
 uncontained: run
 
-required_tests  = $(sort $(notdir $(basename $(shell find build -name '*.log'))))
+function_updates = $(sort $(notdir $(basename $(shell find build -name '*.log'))))
 
 run: build/0hana_test_dispatch
 	@echo "-    Executing : $<"
-	@valgrind --tool=memcheck --leak-check=full --show-leak-kinds=all -q -s $< $(required_tests)
+	@valgrind --tool=memcheck --leak-check=full --show-leak-kinds=all -q -s $< $(function_updates)
 
 object_targets := $(patsubst source/%.c,build/%.o,$(shell find source -name '*.c' | sed 's/\(.*\)\//\1@/' | sort -t@ -k2 | sed 's/@/\//'))
 
@@ -50,34 +50,35 @@ build/0hana_test_dispatch: build/0hana_test_dispatch.c $(object_targets)
 build/%.o: build/%.s
 	@echo "-  Translating :  $< -> $@"
 	@gcc -g -c $< -o $@
-	@echo > $(@:.o=.log)
+	@echo > $(@:.o=.log) "Test incomplete"
 
 .SECONDARY: $(object_targets:.o=.s)
 
 build/%.s: source/%.c
 	@echo '-  Translating : $< -> $@'
-	@gcc -Wall -Wextra -Wpedantic -g -o $@ $< -D test='v test_$(notdir $(basename $<))(FILE * * c Log_File)' -D log_file='"$(@:.s=.log)"' -D function_name='"$(notdir $(basename $<))"' -S -MMD
+	@gcc -Wall -Wextra -Wpedantic -g -o $@ $< -D test='v test_$(notdir $(basename $<))(FILE * * c Log_File, char c extra_spacing[])' -D log_file='"$(@:.s=.log)"' -D function_name='"$(notdir $(basename $<))"' -S -MMD
 
 function_names := $(notdir $(basename $(object_targets)))
 function_count := $(words $(function_names))
          comma := ,
 
-build/0hana_test_dispatch.c: build/-sed-fn2idn  # sed function names to id numbers
+build/0hana_test_dispatch.c: build/0hana-sed-fn2idn  # sed function names to id numbers
 	@echo "-   Generating : $@"
 	@printf > $@ \
 	'/* Hanami Zero (C) 2021: 0hana_test_dispatch.c */\n'\
 	'// Unit testing main function\n'\
 	'$(patsubst %,\n#include "../%",$(shell find source -name '*.h'))\n'\
-	'$(patsubst %,\nv test_%(FILE * * c Log_File);,$(function_names))\n'\
+	'$(patsubst %,\nv test_%(FILE * * c Log_File, char c extra_spacing[]);,$(function_names))\n'\
 	'\n'\
 	'#define _function_count_ $(function_count)\n'\
-	'v     (* c          test[_function_count_])(FILE * * c Log_File) = { $(patsubst %,test_%$(comma),$(function_names)) };\n'\
+	'v     (* c          test[_function_count_])(FILE * * c Log_File, char c extra_spacing[]) = { $(patsubst %,test_%$(comma),$(function_names)) };\n'\
 	'enum ternary Test_Result[_function_count_] = { ternary_0 };  /* Neither pass (+1) nor fail (-1): indicates test result is being determined */\n'\
 	'\n'\
 	'char c * c function_name[_function_count_] = { $(patsubst %,"%"$(comma),$(function_names)) };\n'\
+	'char c * c extra_spacing[_function_count_] = { $(shell max_length=0; for name in $(function_names); do new_length=$$(printf "$${name}" | wc -m); if [ $${new_length} -gt $${max_length} ]; then max_length=$${new_length}; fi; done; for name in $(function_names); do length=$$(printf "$${name}" | wc -m); printf "\"$$(seq $$(($${max_length} - $${length})) | tr -s [:digit:] ' ' | tr -d '\n')\", "; done)};\n'\
 	'$(foreach function,\
 	$(object_targets:.o=.s),\
-	\n$(shell dependency="$$(grep call $(function) | grep -vw $(notdir $(basename $(function))) | grep -ow $$(echo '$(function_names:%=%\|)' | tr -d ' ') | sed -f build/-sed-fn2idn)";\
+	\n$(shell dependency="$$(grep call $(function) | grep -vw $(notdir $(basename $(function))) | grep -ow $$(echo '$(function_names:%=%\|)' | tr -d ' ') | sed -f build/0hana-sed-fn2idn)";\
 		if [ -z "$${dependency}" ];\
 		then echo "#define       dependency_$(notdir $(basename $(function))) NULL";\
 		else echo "int  c        dependency_$(notdir $(basename $(function)))[] = { $${dependency} };";\
@@ -96,10 +97,10 @@ build/0hana_test_dispatch.c: build/-sed-fn2idn  # sed function names to id numbe
 	'	/* 0hana_test_dispatch start notice */\n'\
 	'	fprintf(stderr, "[Test Dispatch]: ");\n'\
 	'	if(Parameters > 1) {\n'\
-	'		fprintf(stderr, "%%i test%%s required.\\n\\n", Parameters - 1, Parameters == 2 ? "" : "s");\n'\
+	'		fprintf(stderr, "%%i function update%%s.\\n\\n", Parameters - 1, Parameters == 2 ? "" : "s");\n'\
 	'	}\n'\
 	'	else {\n'\
-	'		fprintf(stderr, "No testing required.\\n");\n'\
+	'		fprintf(stderr, "No function updates.\\n");\n'\
 	'		fprintf(stderr, "[Leak Analysis]: ");\n'\
 	'		return 0;\n'\
 	'	}\n'\
@@ -107,7 +108,7 @@ build/0hana_test_dispatch.c: build/-sed-fn2idn  # sed function names to id numbe
 	'	/* Required function calculation */\n'\
 	'	for(int X = 0, Y = 1; X < _function_count_; X++) {\n'\
 	'		if(Y < Parameters && strcmp(function_name[X],Parameter[Y]) == 0) {\n'\
-	'			fprintf(stderr, "  %%s  [ Depends on (%%i):", function_name[X], dependencies[X]);\n'\
+	'			fprintf(stderr, "  %%s%%s  [ Depends on (%%i):", extra_spacing[X], function_name[X], dependencies[X]);\n'\
 	'			for(int Z = 0; Z + 1 < dependencies[X]; Z++) {\n'\
 	'				fprintf(stderr, " %%s,", function_name[dependency[X][Z]]);\n'\
 	'			}\n'\
@@ -125,14 +126,14 @@ build/0hana_test_dispatch.c: build/-sed-fn2idn  # sed function names to id numbe
 	'	for(int X = 0; X < _function_count_; X++) {\n'\
 	'		if(Test_Result[X] == ternary_0) {\n'\
 	'			FILE * Log_File = 0;\n'\
-	'			test[X](a(Log_File));\n'\
+	'			test[X](a(Log_File), extra_spacing[X]);\n'\
 	'			if(Log_File isnt NULL) {\n'\
 	'				fclose(Log_File);\n'\
 	'				Test_Result[X] = ternary_2;  /* Test returned a Log_File -> implies failure */\n'\
 	'			}\n'\
 	'			else {\n'\
 	'				Test_Result[X] = ternary_1;  /* Test did not return a failure log -> implicit pass */\n'\
-	'				fprintf(stderr, "\\b\\b\\b%%s test: passed\\n  ...", function_name[X]);\n'\
+	'				fprintf(stderr, "\\b\\b\\b%%s%%s  test: passed\\n  ...", extra_spacing[X], function_name[X]);\n'\
 	'			}\n'\
 	'		}\n'\
 	'	}\n'\
@@ -140,9 +141,9 @@ build/0hana_test_dispatch.c: build/-sed-fn2idn  # sed function names to id numbe
 	'	return 0;\n'\
 	'}'
 
-build/-sed-fn2idn: $(object_targets:.o=.s)
-	@echo '-   Generating : build/-sed-fn2idn'
-	@echo $(function_names) | tr ' ' '\n' | cat -n | sed 's|^[\t ]*\([0-9]\+\)[\t ]\+\([_0-9A-Za-z]\+\)|s\/\2\/\1 - 1,/|' > build/-sed-fn2idn  # sed function name to id number
+build/0hana-sed-fn2idn: $(object_targets:.o=.s)
+	@echo '-   Generating : build/0hana-sed-fn2idn'
+	@echo $(function_names) | tr ' ' '\n' | cat -n | sed 's|^[\t ]*\([0-9]\+\)[\t ]\+\([_0-9A-Za-z]\+\)|s\/\2\/\1 - 1,/|' > build/0hana-sed-fn2idn  # sed function name to id number
 
 clean:
 	@echo '-     Removing : build'

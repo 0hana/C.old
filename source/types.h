@@ -60,13 +60,17 @@ typedef enum ternary (* contrastor)(o O1, o O2);
 		(\
 			*Log_File is NULL \
 		 	&& (*Log_File = fopen(log_file, "a")) \
-			&& fprintf(stderr, "\b\b\b" function_name " test: FAILED -- See " log_file "\n  ...")\
+			&& fprintf(stderr, "\b\b\b%s" function_name "  test: FAILED -- See " log_file "\n  ...", extra_spacing)\
 		)\
 		, fprintf(*Log_File, __FILE__ ": Line %i: Failed subtest: `" #expression "`\n", __LINE__)\
 		__VA_OPT__(, fprintf(*Log_File, "- " __VA_ARGS__), fprintf(*Log_File, "\n"))\
 		, false\
 	)\
 )
+
+static inline bool pass(v) { return true; }
+
+#define pass pass()
 
 #endif//test
 #endif//_types_
