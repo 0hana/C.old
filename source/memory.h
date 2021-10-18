@@ -9,7 +9,7 @@
 static inline o m(x c Size) { return Size ? malloc(Size) : NULL; }  // malloc(0) does not guarantee NULL
 static inline v f(o c Address) { free(Address); }                   // convenience
 
-v copy(x Size, o c Copy, v c * c Original);
+v copy(x Size, v c * c Original, o c Copy);
 v swap(x Size, o c O1, o c O2);
 
 #endif//_memory_
