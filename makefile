@@ -130,10 +130,11 @@ build/0hana_test_dispatch.c: build/0hana_test_dispatch.sed
 	'}\n'\
 	'\n'\
 	'int main(int c Parameters, char c * c Parameter[]) {\n'\
+	'	int evaluation = 0;\n'\
 	'	/* 0hana_test_dispatch start notice */\n'\
 	'	fprintf(stderr, "[ Dispatcher ] : ");\n'\
 	'	if(Parameters > 1) {\n'\
-	'		fprintf(stderr, "%%i function update%%s.\\nRequired tests :\\n\\n", Parameters - 1, Parameters == 2 ? "" : "s");\n'\
+	'		fprintf(stderr, "%%i function update%%s.\\n\\nRequired tests :\\n\\n", Parameters - 1, Parameters == 2 ? "" : "s");\n'\
 	'	}\n'\
 	'	else {\n'\
 	'		fprintf(stderr, "No function updates.\\n");\n'\
@@ -177,7 +178,7 @@ build/0hana_test_dispatch.c: build/0hana_test_dispatch.sed
 	'		}\n'\
 	'	}\n'\
 	'\n'\
-	'	fprintf(stderr, "\\n[ Dispatcher ]: Execute.\\n\\n  ...");\n'\
+	'	fprintf(stderr, "\\n[ Dispatcher ] : Execute.\\n\\n  ...");\n'\
 	'	/* #pragma omp parallel for */\n'\
 	'	for(int X = _function_count_ - 1; X + 1 > 0; X--) {\n'\
 	'		if(Test_Result[Topolexigraphical[X]] == ternary_0) {\n'\
@@ -193,8 +194,21 @@ build/0hana_test_dispatch.c: build/0hana_test_dispatch.sed
 	'			}\n'\
 	'		}\n'\
 	'	}\n'\
+	'	fprintf(stderr, "\\b\\b\\b   \\n[ Error Scan ] :\\n\\n");\n'\
+	'	/* Check to see if a test passed when a dependency test failed */\n'\
+	'	for(int X = _function_count_ - 1; X + 1 > 0; X--) {\n'\
+	'		if(Test_Result[Topolexigraphical[X]] == ternary_1) {\n'\
+	'			for(int Y = 0; Y < dependencies[Topolexigraphical[X]]; Y++) {\n'\
+	'				if(Test_Result[dependency[Topolexigraphical[X]][Y]] is ternary_2) {\n'\
+	'					fprintf(stderr, "  %%s%%s  [ INCONSISTENT WITH DEPENDENCY: %%s ]\\n", extra_spacing[Topolexigraphical[X]], function_name[Topolexigraphical[X]], function_name[dependency[Topolexigraphical[X]][Y]]);\n'\
+	'					evaluation = -1;\n'\
+	'					break;\n'\
+	'				}\n'\
+	'			}\n'\
+	'		}\n'\
+	'	}\n'\
 	'	fprintf(stderr, "\\b\\b\\b   \\n[ Leak Stats ] : ");\n'\
-	'	return 0;\n'\
+	'	return evaluation;\n'\
 	'}'
 
 -include $(object_targets:.o=.d)
