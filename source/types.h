@@ -35,15 +35,17 @@ typedef enum binary {
 	binary_1 = ~0,
 	true  = binary_1,
 	false = binary_0
-} bool;
+} binary, bool;
 
-enum ternary {
+typedef enum ternary {
 	ternary_0 =  0,
 	ternary_1 = +1,
 	ternary_2 = -1
-};
+} ternary;
 
-typedef enum ternary (* contrastor)(o O1, o O2);
+static inline bool little_endian(v) { x Text = 0x01; return s(x) > 1 && ((e*)&Text)[0] == 0x01 ? true : false ; }
+
+v endian_mirror(x c Bytes, o c Datum);
 
 #ifdef  test
 
@@ -70,7 +72,7 @@ typedef enum ternary (* contrastor)(o O1, o O2);
 
 static inline bool pass(v) { return true; }
 
-#define pass pass()
+#define pass pass()  /* This prevents a -Wunused-value compiler warning -- change 'pass()' to 'true' and see what I mean */
 
 #endif//test
 #endif//_types_

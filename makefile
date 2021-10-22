@@ -178,7 +178,7 @@ build/0hana_test_dispatch.c: build/0hana_test_dispatch.sed
 	'		}\n'\
 	'	}\n'\
 	'\n'\
-	'	fprintf(stderr, "\\n[ Dispatcher ] : Execute.\\n\\n  ...");\n'\
+	'	fprintf(stderr, "\\n[ Inspection ] : Execute.\\n\\n  ...");\n'\
 	'	/* #pragma omp parallel for */\n'\
 	'	for(int X = _function_count_ - 1; X + 1 > 0; X--) {\n'\
 	'		if(Test_Result[Topolexigraphical[X]] == ternary_0) {\n'\
