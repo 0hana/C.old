@@ -17,7 +17,7 @@ test {
 		    Copy[X] =     0;
 	}
 
-	copy(s(int) * Number, Copy, Original);
+	copy(s(int) * Number, Original, Copy);
 
 	for(x X = 0; X < Number; X++) {
 		if(subtest(Copy[X] == Original[X], "check loop iteration: %lu", X));
