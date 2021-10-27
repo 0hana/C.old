@@ -65,10 +65,12 @@ build/%.o: build/%.s
 	@gcc -g -c $< -o $@
 	@echo > $(@:.o=.log) "Test incomplete"
 
+_virtual_memory_space_ := $(shell echo $$(($$(printf "%s + %s" $$(free -b | tail -n2 | sed 's/\(Mem\|Swap\):[ \t]*\([0-9][0-9]*\)[ \t].*/\2/')))))
+
 build/%.s: source/%.c
 	@echo '-  Translating : $< -> $@'
 	@mkdir -p $(dir $@)
-	@gcc -Wall -Wextra -Wpedantic -g -o $@ $< -D test='v test_$(notdir $(basename $<))(FILE * * c Log_File, char c extra_spacing[])' -D log_file='"$(@:.s=.log)"' -D function_name='"$(notdir $(basename $<))"' -S -MMD
+	@gcc -Wall -Wextra -Wpedantic -g -o $@ $< -D test='v test_$(notdir $(basename $<))(FILE * * c Log_File, char c extra_spacing[])' -D log_file='"$(@:.s=.log)"' -D function_name='"$(notdir $(basename $<))"' -D _virtual_memory_space_='$(_virtual_memory_space_)' -S -MMD
 
 function_names  := $(notdir $(basename $(object_targets)))
 
