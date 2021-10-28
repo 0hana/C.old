@@ -1,26 +1,6 @@
 /* Hanami Zero (C) 2021: reallocate_array.c */
 #include "0hana/array.h"
 
-binary reallocate_array(x c Indexes_Request, array * c A) {
-	// Memory release control
-	if(Indexes_Request is 0) {
-		if(A->Indexes is 0) return binary_0;  // Nothing to do
-		f(A->Datum);
-		relax(A->Indexes, x) =    0;
-		relax(A->Datum, o)   = NULL;
-	}
-	// Memory allocation control
-	else if(A->Density != 0) {
-		o Restore = A->Datum;
-		//  0 to ~0 (m/alloc)
-		if(A->Indexes is 0) { if((relax(A->Datum, o) = m(A->Density * Indexes_Request)) is NULL) return relax(A->Datum, o) = Restore, binary_1; }  // Allocation failure
-		// ~0 to ~0 (realloc)
-		else  if((relax(A->Datum, o) = realloc(A->Datum, A->Density * Indexes_Request)) is NULL) return relax(A->Datum, o) = Restore, binary_1;    // Allocation failure
-		relax(A->Indexes, x) = Indexes_Request;
-	}
-	return binary_0;  // Resizing success
-}
-
 #ifdef  test
 
 test {
@@ -67,3 +47,24 @@ test {
 }
 
 #endif//test
+
+
+binary reallocate_array(x c Indexes_Request, array * c A) {
+	// Memory release control
+	if(Indexes_Request is 0) {
+		if(A->Indexes is 0) return binary_0;  // Nothing to do
+		f(A->Datum);
+		relax(A->Indexes, x) =    0;
+		relax(A->Datum, o)   = NULL;
+	}
+	// Memory allocation control
+	else if(A->Density != 0) {
+		o Restore = A->Datum;
+		//  0 to ~0 (m/alloc)
+		if(A->Indexes is 0) { if((relax(A->Datum, o) = m(A->Density * Indexes_Request)) is NULL) return relax(A->Datum, o) = Restore, binary_1; }  // Allocation failure
+		// ~0 to ~0 (realloc)
+		else  if((relax(A->Datum, o) = realloc(A->Datum, A->Density * Indexes_Request)) is NULL) return relax(A->Datum, o) = Restore, binary_1;    // Allocation failure
+		relax(A->Indexes, x) = Indexes_Request;
+	}
+	return binary_0;  // Resizing success
+}

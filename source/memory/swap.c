@@ -1,15 +1,6 @@
 /* Hanami Zero (C) 2021: memory/swap.c */
 #include "0hana/memory.h"
 
-v swap(x Size, o c O1, o c O2) {
-	while(Size-- > 0) {
-		e Copy         = ((e*)O2)[Size];
-		((e*)O2)[Size] = ((e*)O1)[Size];
-		((e*)O1)[Size] =           Copy;
-	}
-}
-
-
 #ifdef test
 
 test {
@@ -58,3 +49,12 @@ test {
 }
 
 #endif
+
+
+v swap(x Size, o c O1, o c O2) {
+	while(Size-- > 0) {
+		e Copy         = ((e*)O2)[Size];
+		((e*)O2)[Size] = ((e*)O1)[Size];
+		((e*)O1)[Size] =           Copy;
+	}
+}

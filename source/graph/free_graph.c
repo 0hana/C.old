@@ -1,28 +1,6 @@
 /* Hanami Zero (C) 2021: graph/free_graph.c */
 #include "0hana/graph.h"
 
-v free_graph(graph * c G)
-{
-	#define V Vertex
-	#define Vs Vertexes
-	for(x V = 0; V < G->Vs; V++)
-	{
-		#define A Adjacency
-		#define As Adjacencyes
-		for(x A = 0; A < G->V[V].As; A++)
-		{
-			if(G->V[V].A[A].Edge) f(G->V[V].A[A].Edge);
-		}
-		f(G->V[V].A);
-		#undef  As
-		#undef  A
-	}
-	f(G->V), f(G);
-	#undef  Vs
-	#undef  V
-}
-
-
 #ifdef  test
 
 test
@@ -45,3 +23,25 @@ test
 }
 
 #endif//test
+
+
+v free_graph(graph * c G)
+{
+	#define V Vertex
+	#define Vs Vertexes
+	for(x V = 0; V < G->Vs; V++)
+	{
+		#define A Adjacency
+		#define As Adjacencyes
+		for(x A = 0; A < G->V[V].As; A++)
+		{
+			if(G->V[V].A[A].Edge) f(G->V[V].A[A].Edge);
+		}
+		f(G->V[V].A);
+		#undef  As
+		#undef  A
+	}
+	f(G->V), f(G);
+	#undef  Vs
+	#undef  V
+}

@@ -1,9 +1,6 @@
 /* Hanami Zero (C) 2021: memory/copy.c */
 #include "0hana/memory.h"
 
-v copy(x Size, v c * c Original, o c Copy) { while(Size-- > 0) { ((e*)Copy)[Size] = ((e*)Original)[Size]; } }
-
-
 #ifdef  test
 
 test {
@@ -26,3 +23,6 @@ test {
 }
 
 #endif//test
+
+
+v copy(x Size, v c * c Original, o c Copy) { while(Size-- > 0) { ((e*)Copy)[Size] = ((e*)Original)[Size]; } }
