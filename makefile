@@ -132,7 +132,6 @@ build/0hana_test_dispatch.c: build/0hana_test_dispatch.sed
 	'}\n'\
 	'\n'\
 	'int main(int c Parameters, char c * c Parameter[]) {\n'\
-	'	int evaluation = 0;\n'\
 	'	/* 0hana_test_dispatch start notice */\n'\
 	'	fprintf(stderr, "[ Dispatcher ] : ");\n'\
 	'	if(Parameters > 1) {\n'\
@@ -196,6 +195,7 @@ build/0hana_test_dispatch.c: build/0hana_test_dispatch.sed
 	'			}\n'\
 	'		}\n'\
 	'	}\n'\
+	'	int evaluation = 0;\n'\
 	'	fprintf(stderr, "\\b\\b\\b   \\n[ Error Scan ] :\\n\\n");\n'\
 	'	/* Check to see if a test passed when a dependency test failed */\n'\
 	'	for(int X = _function_count_ - 1; X + 1 > 0; X--) {\n'\
@@ -209,6 +209,7 @@ build/0hana_test_dispatch.c: build/0hana_test_dispatch.sed
 	'			}\n'\
 	'		}\n'\
 	'	}\n'\
+	'	if(evaluation is 0) { fprintf(stderr, "  ALL CLEAR! No logical errors detected in test results.\\n"); }'\
 	'	fprintf(stderr, "\\b\\b\\b   \\n[ Leak Stats ] : ");\n'\
 	'	return evaluation;\n'\
 	'}'
