@@ -21,8 +21,8 @@ binary  merge_sort(array c A);  /* Ascending comparison sort based on A.Contrast
   //  影 の 変換
 
 /* The above 4 binary functions depend on a memory allocation attempt whose success cannot generally be known ahead of time.
-   - A return of binary_1 indicates the allocation attempt failed and no mutation array data has been performed.
-   - A return of binary_0 indicates the function completed successfully */
+   - A return of binary_1 indicates memory was available and the function was completed
+   - A return of binary_0 indicates available memory was insufficient to execute the function, and that any input data was restored to it's pre-call state */
 
 x ordinal_select(array c A, x c N);  // return the index of the Nth item as if the array were sorted in ascending order
 
