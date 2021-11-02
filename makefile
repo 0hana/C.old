@@ -86,6 +86,7 @@ build/0hana_test_dispatch.c: build/0hana_test_dispatch.sed
 	@printf > build/0hana_test_dispatch.c \
 	'/* Hanami Zero (C) 2021: 0hana_test_dispatch.c */\n'\
 	'// Unit testing main function\n'\
+	'/* #include <omp.h> */\n'\
 	'$(foreach header,$(shell find source -name '*.h'),#include "../$(header)"\n)'\
 	'$(foreach function,$(function_names),\nv test_$(function)(FILE * * c Log_File$(comma) char c extra_spacing[]);\n)'\
 	'\n'\
@@ -135,7 +136,9 @@ build/0hana_test_dispatch.c: build/0hana_test_dispatch.sed
 	'	/* 0hana_test_dispatch start notice */\n'\
 	'	fprintf(stderr, "[ Dispatcher ] : ");\n'\
 	'	if(Parameters > 1) {\n'\
-	'		fprintf(stderr, "%%i function update%%s.\\n\\nRequired tests :\\n\\n", Parameters - 1, Parameters == 2 ? "" : "s");\n'\
+	'		fprintf(stderr, "%%i function update%%s.\\n", Parameters - 1, Parameters == 2 ? "" : "s");\n'\
+	'		fprintf(stderr, "%%s endian substrate detected )\\n", little_endian() ? "( Little" : "(    Big");\n'\
+	'		fprintf(stderr, "Required tests :\\n\\n");\n'\
 	'	}\n'\
 	'	else {\n'\
 	'		fprintf(stderr, "No function updates.\\n");\n'\
@@ -181,7 +184,7 @@ build/0hana_test_dispatch.c: build/0hana_test_dispatch.sed
 	'\n'\
 	'	fprintf(stderr, "\\n[ Inspection ] : Execute.\\n\\n  ...");\n'\
 	'	/* #pragma omp parallel for */\n'\
-	'	for(int X = _function_count_ - 1; X + 1 > 0; X--) {\n'\
+	'	for(int X = _function_count_ - 1; X > -1; X--) {\n'\
 	'		if(Test_Result[Topolexigraphical[X]] == ternary_0) {\n'\
 	'			FILE * Log_File = 0;\n'\
 	'			test[Topolexigraphical[X]](a(Log_File), extra_spacing[Topolexigraphical[X]]);\n'\
@@ -196,7 +199,7 @@ build/0hana_test_dispatch.c: build/0hana_test_dispatch.sed
 	'		}\n'\
 	'	}\n'\
 	'	int evaluation = 0;\n'\
-	'	fprintf(stderr, "\\b\\b\\b   \\n[ Error Scan ] :\\n\\n");\n'\
+	'	fprintf(stderr, "\\b\\b\\b   \\n[ Meta Check ] :\\n\\n");\n'\
 	'	/* Check to see if a test passed when a dependency test failed */\n'\
 	'	for(int X = _function_count_ - 1; X + 1 > 0; X--) {\n'\
 	'		if(Test_Result[Topolexigraphical[X]] == ternary_1) {\n'\
@@ -209,7 +212,7 @@ build/0hana_test_dispatch.c: build/0hana_test_dispatch.sed
 	'			}\n'\
 	'		}\n'\
 	'	}\n'\
-	'	if(evaluation is 0) { fprintf(stderr, "  ALL CLEAR! No logical errors detected in test results.\\n"); }'\
+	'	if(evaluation is 0) { fprintf(stderr, "  CONSISTENT -- No logical errors detected in test results.\\n"); }'\
 	'	fprintf(stderr, "\\b\\b\\b   \\n[ Leak Stats ] : ");\n'\
 	'	return evaluation;\n'\
 	'}'
