@@ -26,7 +26,7 @@ test {
 		subtest(Qword == 0x3322110078563412);
 	}
 	{
-		e cstring[] = "Hello World!";
+		char cstring[] = "Hello World!";
 		endian_mirror(s(cstring), cstring);
 		subtest(s(cstring) == 13 && strncmp(cstring, "\0!dlroW olleH", s(cstring)) == 0);
 	}

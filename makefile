@@ -53,6 +53,7 @@ function_updates = $(sort $(notdir $(basename $(shell find build -name '*.log'))
 run: build/0hana_test_dispatch
 	@echo '    READY!'
 	@valgrind --tool=memcheck --leak-check=full --show-leak-kinds=all -q -s $< $(function_updates)
+	@Logs="$$(find build -name '*.log')"; if [ -n "$$Logs" ]; then printf "\n  Failures occured -- See logs.\n\n"; else printf "\n  All tests passed.\n\n"; fi
 
 object_targets  := $(patsubst source/%.c,build/%.o,$(shell find source -name '*.c' | sed 's/\(.*\)\//\1@/' | sort -t@ -k2 | sed 's/@/\//'))
 
@@ -70,7 +71,7 @@ _virtual_memory_space_ := $(shell echo $$(($$(printf "%s + %s" $$(free -b | tail
 build/%.s: source/%.c
 	@echo '-  Translating : $< -> $@'
 	@mkdir -p $(dir $@)
-	@gcc -Wall -Wextra -Wpedantic -g -o $@ $< -D test='v test_$(notdir $(basename $<))(FILE * * c Log_File, char c extra_spacing[])' -D log_file='"$(@:.s=.log)"' -D function_name='"$(notdir $(basename $<))"' -D _virtual_memory_space_='$(_virtual_memory_space_)' -S -MMD
+	@gcc -Wall -Wextra -Wpedantic -g -o $@ $< -D test='void test_$(notdir $(basename $<))(FILE * * const Log_File, char const extra_spacing[])' -D log_file='"$(@:.s=.log)"' -D function_name='"$(notdir $(basename $<))"' -D _virtual_memory_space_='$(_virtual_memory_space_)' -S -MMD
 
 function_names  := $(notdir $(basename $(object_targets)))
 
@@ -87,35 +88,35 @@ build/0hana_test_dispatch.c: build/0hana_test_dispatch.sed
 	'/* Hanami Zero (C) 2021: 0hana_test_dispatch.c */\n'\
 	'// Unit testing main function\n'\
 	'/* #include <omp.h> */\n'\
-	'$(foreach header,$(shell find source -name '*.h'),#include "../$(header)"\n)'\
-	'$(foreach function,$(function_names),\nv test_$(function)(FILE * * c Log_File$(comma) char c extra_spacing[]);\n)'\
+	'$(foreach header,$(shell find source -name '*.h'),\n#include "../$(header)")\n'\
+	'$(foreach function,$(function_names),\nvoid test_$(function)(FILE * * const Log_File$(comma) char const extra_spacing[]);\n)'\
 	'\n'\
 	'#define _function_count_ $(function_count)\n'\
-	'char c * c function_name[_function_count_] = { $(function_names:%="%"$(comma)) };\n'\
-	'char c * c extra_spacing[_function_count_] = { $(shell max_length=0; for name in $(function_names); do new_length=$$(printf "$${name}" | wc -m); if [ $${new_length} -gt $${max_length} ]; then max_length=$${new_length}; fi; done; for name in $(function_names); do length=$$(printf "$${name}" | wc -m); printf "\"$$(seq $$(($${max_length} - $${length})) | tr -s [:digit:] ' ' | tr -d '\n')\", "; done)};\n'\
-	'v     (* c          test[_function_count_])(FILE * * c Log_File, char c extra_spacing[]) = { $(function_names:%=test_%$(comma)) };\n'\
-	'enum ternary Test_Result[_function_count_] = { ternary_0 };  /* Neither pass (+1) nor fail (-1): indicates test result is being determined */\n'\
+	'char const * const function_name[_function_count_] = { $(function_names:%="%"$(comma)) };\n'\
+	'char const * const extra_spacing[_function_count_] = { $(shell max_length=0; for name in $(function_names); do new_length=$$(printf "$${name}" | wc -m); if [ $${new_length} -gt $${max_length} ]; then max_length=$${new_length}; fi; done; for name in $(function_names); do length=$$(printf "$${name}" | wc -m); printf "\"$$(seq $$(($${max_length} - $${length})) | tr -s [:digit:] ' ' | tr -d '\n')\", "; done)};\n'\
+	'void      (* const          test[_function_count_])(FILE * * const Log_File, char const extra_spacing[]) = { $(function_names:%=test_%$(comma)) };\n'\
+	'enum ternary         Test_Result[_function_count_] = { ternary_0 };  /* Neither pass (+1) nor fail (-1): indicates test result is being determined */\n'\
 	'\n'\
 	'$(foreach function,\
 	 $(object_targets:.o=.s),\
-	\n$(shell dependency="$$(grep call $(function) | grep -vw $(notdir $(basename $(function))) | grep -ow $$(echo '$(function_names:%=%\|)' | tr -d ' ') | sed -f build/0hana_test_dispatch.sed)";\
+	\n$(shell dependency="$$(grep 'call\|bl' $(function) | grep -vw $(notdir $(basename $(function))) | grep -ow $$(echo '$(function_names:%=%\|)' | tr -d ' ') | sort -u | sed -f build/0hana_test_dispatch.sed)";\
 		if [ -z "$${dependency}" ];\
-		then echo "#define       dependency_$(notdir $(basename $(function))) NULL";\
-		else echo "int  c        dependency_$(notdir $(basename $(function)))[] = { $${dependency} };";\
+		then echo "#define           dependency_$(notdir $(basename $(function))) NULL";\
+		else echo "int  const        dependency_$(notdir $(basename $(function)))[] = { $${dependency} };";\
 		fi\
 	))\n'\
 	'\n'\
-	'int  c * c    dependency[_function_count_] = {\n'\
+	'int  const * const    dependency[_function_count_] = {\n'\
 	'$(foreach function,$(function_names),\tdependency_$(function),\n)'\
 	'};\n'\
 	'\n'\
-	'int  c      dependencies[_function_count_] = {\n'\
+	'int  const          dependencies[_function_count_] = {\n'\
 	'$(foreach function,$(function_names),\t((z)dependency_$(function) + 0 ? s(dependency_$(function)) / s(int) : 0),\n)'\
 	'};\n'\
 	'\n'\
-	'int    Topolexigraphical[_function_count_] = { -1 };\n'\
+	'int            Topolexigraphical[_function_count_] = { -1 };\n'\
 	'\n'\
-	'v topolex_recurse(int Function_ID, bool Visited[], int * Topolex_Iterator) {\n'\
+	'void topolex_recurse(int Function_ID, bool Visited[], int * Topolex_Iterator) {\n'\
 	'	Visited[Function_ID] = true;\n'\
 	'	for(int D = 0; D < dependencies[Function_ID]; D++)\n'\
 	'		if(Visited[dependency[Function_ID][D]] == false) topolex_recurse(dependency[Function_ID][D], Visited, Topolex_Iterator);\n'\
@@ -123,16 +124,16 @@ build/0hana_test_dispatch.c: build/0hana_test_dispatch.sed
 	'	Topolexigraphical[--(*Topolex_Iterator)] = Function_ID;\n'\
 	'}\n'\
 	'\n'\
-	'v topolexigraphical(v) {\n'\
+	'void topolexigraphical(void) {\n'\
 	'	bool Visited[_function_count_] = { false };\n'\
 	'	int Topolex_Iterator = _function_count_;\n'\
 	'	for(int Function_ID = 0; Function_ID < _function_count_; Function_ID++) {\n'\
 	'		if(Visited[Function_ID] is false)\n'\
-	'			topolex_recurse(Function_ID, Visited, a(Topolex_Iterator));\n'\
+	'			topolex_recurse(Function_ID, Visited, &(Topolex_Iterator));\n'\
 	'	}\n'\
 	'}\n'\
 	'\n'\
-	'int main(int c Parameters, char c * c Parameter[]) {\n'\
+	'int main(int const Parameters, char const * const Parameter[]) {\n'\
 	'	/* 0hana_test_dispatch start notice */\n'\
 	'	fprintf(stderr, "[ Dispatcher ] : ");\n'\
 	'	if(Parameters > 1) {\n'\
@@ -187,8 +188,8 @@ build/0hana_test_dispatch.c: build/0hana_test_dispatch.sed
 	'	for(int X = _function_count_ - 1; X > -1; X--) {\n'\
 	'		if(Test_Result[Topolexigraphical[X]] == ternary_0) {\n'\
 	'			FILE * Log_File = 0;\n'\
-	'			test[Topolexigraphical[X]](a(Log_File), extra_spacing[Topolexigraphical[X]]);\n'\
-	'			if(Log_File isnt NULL) {\n'\
+	'			test[Topolexigraphical[X]](&(Log_File), extra_spacing[Topolexigraphical[X]]);\n'\
+	'			if(Log_File != NULL) {\n'\
 	'				fclose(Log_File);\n'\
 	'				Test_Result[Topolexigraphical[X]] = ternary_2;  /* Test returned a Log_File -> implies failure */\n'\
 	'			}\n'\
