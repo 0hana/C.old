@@ -19,7 +19,7 @@
 
 typedef size_t    x;  //indeX
 typedef ptrdiff_t z;  //Zahlen
-typedef char      e;  //Element
+typedef unsigned char e;  //Element
 typedef double    r;  //Real
 typedef void *    o;  //Object
 typedef void      v;  //Void
