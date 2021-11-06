@@ -53,7 +53,11 @@ function_updates = $(sort $(notdir $(basename $(shell find build -name '*.log'))
 run: build/0hana_test_dispatch
 	@echo '    READY!'
 	@valgrind --tool=memcheck --leak-check=full --show-leak-kinds=all -q -s $< $(function_updates)
-	@Logs="$$(find build -name '*.log')"; if [ -n "$$Logs" ]; then printf "\n  Failures occured -- See logs.\n\n"; else printf "\n  All tests passed.\n\n"; fi
+	@Logs="$$(find build -name '*.log')";\
+		if [ -n "$$Logs" ];\
+		then printf "\nFAIL: Failures occured -- See logs.\n\n"; exit 1;\
+		else printf "\nPASS: All tests passed.\n\n";\
+		fi
 
 object_targets  := $(patsubst source/%.c,build/%.o,$(shell find source -name '*.c' | sed 's/\(.*\)\//\1@/' | sort -t@ -k2 | sed 's/@/\//'))
 
