@@ -1,28 +1,27 @@
 /* Hanami Zero (C) 2021: types/endian_mirror.c */
-#include <stdint.h>
 #include "0hana/types.h"
 
 #ifdef  test
 
 test {
 	{	
-		e Byte = 0x12;
-		endian_mirror(s(Byte), a(Byte));
+		byte Byte =     0x12;
+		endian_mirror(s(Byte), &(Byte));
 		subtest(Byte == 0x12);
 	}
 	{
-		int16_t Word = 0x1234;
-		endian_mirror(s(Word), a(Word));
+		int16_t Word =  0x1234;
+		endian_mirror(s(Word), &(Word));
 		subtest(Word == 0x3412);
 	}
 	{
-		int32_t Dword = 0x12345678;
-		endian_mirror(s(Dword), a(Dword));
+		int32_t Dword =  0x12345678;
+		endian_mirror(s(Dword), &(Dword));
 		subtest(Dword == 0x78563412);
 	}
 	{
-		int64_t Qword = 0x1234567800112233;
-		endian_mirror(s(Qword), a(Qword));
+		int64_t Qword =  0x1234567800112233;
+		endian_mirror(s(Qword), &(Qword));
 		subtest(Qword == 0x3322110078563412);
 	}
 	{
@@ -34,10 +33,10 @@ test {
 
 #endif//test
 
-v endian_mirror(x c Bytes, o c Datum) {
-	for(x X = 0; X < Bytes / 2; X++) {
-		e Byte         = ((e*)Datum)[X];
-		((e*)Datum)[X] = ((e*)Datum)[Bytes - 1 - X];
-		((e*)Datum)[Bytes - 1 - X]           = Byte;
+void endian_mirror(i z Bytes, io a const Datum) {
+	for(z X = 0; X < Bytes / 2; X++) {
+		byte Byte         = ((byte*)Datum)[X];
+		((byte*)Datum)[X] = ((byte*)Datum)[Bytes - 1 - X];
+		((byte*)Datum)[Bytes - 1 - X]              = Byte;
 	}
 }

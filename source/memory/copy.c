@@ -9,20 +9,24 @@ test {
 	int Original[Number];
 	int     Copy[Number];
 
-	for(x X = 0; X < Number; X++) {
+	for(size_t X = 0; X < Number; X++) {
 		Original[X] = X * X;
 		    Copy[X] =     0;
 	}
 
 	copy(s(int) * Number, Original, Copy);
 
-	for(x X = 0; X < Number; X++) {
+	for(size_t X = 0; X < Number; X++) {
 		if(subtest(Copy[X] == Original[X], "check loop iteration: %lu", X));
 		else return;
 	}
+	#undef  Number
 }
 
 #endif//test
 
 
-v copy(x Size, v c * c Original, o c Copy) { while(Size-- > 0) { ((e*)Copy)[Size] = ((e*)Original)[Size]; } }
+void copy(i z Size, i a i Original, io a i Copy) {
+	for(z X = 0; X < Size; X++)
+		((byte*)Copy)[X] = ((byte*)Original)[X];
+}

@@ -5,25 +5,22 @@
 #include "memory.h"
 
 typedef struct array {
-	ternary (* _c Contrastor)(v c * c O1, v c * c O2);
-	x _c Indexes;
-	o _c Datum;
-	x _c Density;
+	u(ternary, Contrastor, i a O1, i a O2);
+	u(z, Indexes);
+	u(a, Datum);
+	u(z, Density);
 } array;
 
-#define index(number, Array) (*((Array).Datum + number * (Array).Density))
+function resize(i z Indexes_Request, io array * i A);
+// attempt to reallocate the memory referenced A.Datum to hold A.Indexes * A.Density
 
-binary  reallocate_array(x c Indexes_Request, array * c A);  // attempt to reallocate the memory referenced A.Datum to hold A.Indexes * A.Density
+function radix_sort(i array A);
+// Expects data is stored in little endian order
 
-binary  radix_sort(array c A);  // Expects data is stored in little endian order
-binary  merge_sort(array c A);  /* Ascending comparison sort based on A.Contrastor -- if O1 is a lower index than O2, they will only be swapped if the A.Contrastor(O1, O2) returns ternary_1
-                                   - This can be optimized by using only a greaterthan function */
-  //  影 の 変換
+function merge_sort(i array A);
+/* Ascending comparison sort based on A.Contrastor --
+   if O1 is a lower index than O2, they will only be swapped if the A.Contrastor(O1, O2) returns ternary_1
+   - This can be optimized by using only a greaterthan function */
 
-/* The above 4 binary functions depend on a memory allocation attempt whose success cannot generally be known ahead of time.
-   - A return of binary_1 indicates memory was available and the function was completed
-   - A return of binary_0 indicates available memory was insufficient to execute the function, and that any input data was restored to it's pre-call state */
-
-x ordinal_select(array c A, x c N);  // return the index of the Nth item as if the array were sorted in ascending order
-
+//  影 の 変換
 #endif//_array_
