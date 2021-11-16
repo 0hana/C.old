@@ -132,7 +132,7 @@ build/0hana_test_dispatch.c: build/0hana_test_dispatch.sed
 	'	bool Visited[_function_count_] = { false };\n'\
 	'	int Topolex_Iterator = _function_count_;\n'\
 	'	for(int Function_ID = 0; Function_ID < _function_count_; Function_ID++) {\n'\
-	'		if(Visited[Function_ID] is false)\n'\
+	'		if(Visited[Function_ID] == false)\n'\
 	'			topolex_recurse(Function_ID, Visited, &(Topolex_Iterator));\n'\
 	'	}\n'\
 	'}\n'\
@@ -142,7 +142,7 @@ build/0hana_test_dispatch.c: build/0hana_test_dispatch.sed
 	'	fprintf(stderr, "[ Dispatcher ] : ");\n'\
 	'	if(Parameters > 1) {\n'\
 	'		fprintf(stderr, "%%i function update%%s.\\n", Parameters - 1, Parameters == 2 ? "" : "s");\n'\
-	'		fprintf(stderr, "%%s endian substrate detected )\\n", little_endian() ? "( Little" : "(    Big");\n'\
+	'		fprintf(stderr, "%%s endian substrate detected )\\n", little_endian ? "( Little" : "(    Big");\n'\
 	'		fprintf(stderr, "Required tests :\\n\\n");\n'\
 	'	}\n'\
 	'	else {\n'\
@@ -166,22 +166,22 @@ build/0hana_test_dispatch.c: build/0hana_test_dispatch.sed
 	'	topolexigraphical();\n'\
 	'\n'\
 	'	for(int X = _function_count_ - 1; X + 1 > 0; X--) {\n'\
-	'		if(Test_Result[Topolexigraphical[X]] is ternary_1 /* implicit pass */) {\n'\
+	'		if(Test_Result[Topolexigraphical[X]] == ternary_1 /* implicit pass */) {\n'\
 	'			for(int Y = 0; Y < dependencies[Topolexigraphical[X]]; Y++) {\n'\
-	'				if(Test_Result[dependency[Topolexigraphical[X]][Y]] is ternary_0 /* Undetermined */) Test_Result[Topolexigraphical[X]] = ternary_2;  /* Depends on undetermined status, and is thus undetermined itself */\n'\
+	'				if(Test_Result[dependency[Topolexigraphical[X]][Y]] == ternary_0 /* Undetermined */) Test_Result[Topolexigraphical[X]] = ternary_2;  /* Depends on undetermined status, and is thus undetermined itself */\n'\
 	'			}\n'\
 	'		}\n'\
 	'	}\n'\
 	'\n'\
 	'	/* Required testing print calls */\n'\
 	'	for(int X = _function_count_ - 1; X + 1 > 0; X--) {\n'\
-	'		if(Test_Result[Topolexigraphical[X]] is ternary_0) fprintf(stderr, "  %%s%%s  [ updated ]\\n", extra_spacing[Topolexigraphical[X]], function_name[Topolexigraphical[X]]);\n'\
+	'		if(Test_Result[Topolexigraphical[X]] == ternary_0) fprintf(stderr, "  %%s%%s  [ updated ]\\n", extra_spacing[Topolexigraphical[X]], function_name[Topolexigraphical[X]]);\n'\
 	'		else\n'\
-	'		if(Test_Result[Topolexigraphical[X]] is ternary_2) {\n'\
+	'		if(Test_Result[Topolexigraphical[X]] == ternary_2) {\n'\
 	'			Test_Result[Topolexigraphical[X]] = ternary_0;\n'\
 	'			fprintf(stderr, "  %%s%%s  [ depends on:", extra_spacing[Topolexigraphical[X]], function_name[Topolexigraphical[X]]);\n'\
 	'			for(int Y = 0; Y < dependencies[Topolexigraphical[X]]; Y++) {\n'\
-	'				if(Test_Result[dependency[Topolexigraphical[X]][Y]] is ternary_0) fprintf(stderr, " %%s,", function_name[dependency[Topolexigraphical[X]][Y]]);'\
+	'				if(Test_Result[dependency[Topolexigraphical[X]][Y]] == ternary_0) fprintf(stderr, " %%s,", function_name[dependency[Topolexigraphical[X]][Y]]);'\
 	'			}\n'\
 	'			fprintf(stderr, " ]\\n");\n'\
 	'		}\n'\
@@ -209,7 +209,7 @@ build/0hana_test_dispatch.c: build/0hana_test_dispatch.sed
 	'	for(int X = _function_count_ - 1; X + 1 > 0; X--) {\n'\
 	'		if(Test_Result[Topolexigraphical[X]] == ternary_1) {\n'\
 	'			for(int Y = 0; Y < dependencies[Topolexigraphical[X]]; Y++) {\n'\
-	'				if(Test_Result[dependency[Topolexigraphical[X]][Y]] is ternary_2) {\n'\
+	'				if(Test_Result[dependency[Topolexigraphical[X]][Y]] == ternary_2) {\n'\
 	'					fprintf(stderr, "  %%s%%s  [ INCONSISTENT WITH DEPENDENCY: %%s ]\\n", extra_spacing[Topolexigraphical[X]], function_name[Topolexigraphical[X]], function_name[dependency[Topolexigraphical[X]][Y]]);\n'\
 	'					evaluation = -1;\n'\
 	'					break;\n'\
@@ -217,7 +217,7 @@ build/0hana_test_dispatch.c: build/0hana_test_dispatch.sed
 	'			}\n'\
 	'		}\n'\
 	'	}\n'\
-	'	if(evaluation is 0) { fprintf(stderr, "  CONSISTENT -- No logical errors detected in test results.\\n"); }'\
+	'	if(evaluation == 0) { fprintf(stderr, "  CONSISTENT -- No logical errors detected in test results.\\n"); }'\
 	'	fprintf(stderr, "\\b\\b\\b   \\n[ Leak Stats ] : ");\n'\
 	'	return evaluation;\n'\
 	'}'
